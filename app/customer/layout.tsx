@@ -1,4 +1,5 @@
-import { CustomerSidebar } from "@/components/customer/customer-sidebar";
+import { CustomerLayoutChrome } from "@/components/customer/customer-layout-chrome";
+import { AuthGuard } from "@/components/auth/auth-guard";
 
 export default function CustomerLayout({
   children,
@@ -6,11 +7,8 @@ export default function CustomerLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-[calc(100vh-8rem)]">
-      <CustomerSidebar />
-      <div className="flex-1 overflow-auto pl-16 lg:pl-0">
-        {children}
-      </div>
-    </div>
+    <AuthGuard loginPath="/customer/login">
+      <CustomerLayoutChrome>{children}</CustomerLayoutChrome>
+    </AuthGuard>
   );
 }

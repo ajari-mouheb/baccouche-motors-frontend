@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu } from "lucide-react";
+import { Menu, User } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -27,6 +28,7 @@ const navLinks = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { user } = useAuth();
   const isHome = pathname === "/";
 
   return (
@@ -79,6 +81,39 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          {(user?.role === "customer" || !user) && (
+            <Button
+              asChild
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "hidden sm:inline-flex gap-1.5",
+                isHome
+                  ? "text-white hover:bg-white/10 hover:text-white"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Link href={user?.role === "customer" ? "/customer/dashboard" : "/customer/login"}>
+                <User className="size-4" />
+                Espace client
+              </Link>
+            </Button>
+          )}
+          {user?.role === "admin" && (
+            <Button
+              asChild
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "hidden sm:inline-flex",
+                isHome
+                  ? "text-white hover:bg-white/10 hover:text-white"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Link href="/admin/dashboard">Admin</Link>
+            </Button>
+          )}
           <Button
             asChild
             size="sm"
@@ -118,6 +153,13 @@ export function Header() {
                     {link.label}
                   </Link>
                 ))}
+                <Link
+                  href={user?.role === "customer" ? "/customer/dashboard" : "/customer/login"}
+                  onClick={() => setOpen(false)}
+                  className="text-sm font-medium hover:text-luxury-accent transition-colors"
+                >
+                  Espace client
+                </Link>
                 <Button
                   asChild
                   className="mt-4 bg-luxury-accent text-primary hover:bg-luxury-accent/90"

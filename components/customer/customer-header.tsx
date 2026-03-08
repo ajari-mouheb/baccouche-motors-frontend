@@ -7,23 +7,22 @@ import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 
 const pageLabels: Record<string, string> = {
-  "/admin/dashboard": "Tableau de bord",
-  "/admin/test-drives": "Test Drives",
-  "/admin/contacts": "Messages",
-  "/admin/cars": "Véhicules",
-  "/admin/news": "Actualités",
-  "/admin/login": "Connexion",
+  "/customer/dashboard": "Tableau de bord",
+  "/customer/test-drives": "Mes demandes Test Drive",
+  "/customer/profile": "Mon profil",
+  "/customer/login": "Connexion",
+  "/customer/register": "Inscription",
 };
 
-export function AdminHeader() {
+export function CustomerHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useAuth();
-  const label = pageLabels[pathname] ?? "Admin";
+  const label = pageLabels[pathname] ?? "Espace client";
 
   function handleLogout() {
     logout();
-    router.push("/admin/login");
+    router.push("/customer/login");
   }
 
   return (
@@ -31,18 +30,18 @@ export function AdminHeader() {
       <div className="flex h-14 items-center justify-between gap-2 px-4 lg:px-8">
         <div className="flex items-center gap-2">
           <Link
-            href="/admin/dashboard"
+            href="/customer/dashboard"
             className="text-sm font-medium text-muted-foreground hover:text-foreground"
           >
-            Admin
+            Espace client
           </Link>
           <ChevronRight className="size-4 text-muted-foreground" />
           <span className="text-sm font-medium">{label}</span>
         </div>
-        {user && pathname !== "/admin/login" && (
+        {user && pathname !== "/customer/login" && pathname !== "/customer/register" && (
           <div className="flex items-center gap-2">
             <span className="hidden text-xs text-muted-foreground sm:inline">
-              {user.email}
+              {user.name}
             </span>
             <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-1.5">
               <LogOut className="size-4" />
