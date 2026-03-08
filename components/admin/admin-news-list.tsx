@@ -4,11 +4,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import { toast } from "sonner";
 import type { NewsArticle } from "@/lib/data/news";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { NewsFormDialog } from "./news-form-dialog";
+import { fetchNews, createNews, updateNews, deleteNews } from "@/lib/api/news";
 
 interface AdminNewsListProps {
   articles: NewsArticle[];
@@ -16,14 +18,18 @@ interface AdminNewsListProps {
 
 export function AdminNewsList({ articles: initialArticles }: AdminNewsListProps) {
   const [articles, setArticles] = useState<NewsArticle[]>(initialArticles);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [deleteSlug, setDeleteSlug] = useState<string | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editingArticle, setEditingArticle] = useState<NewsArticle | null>(null);
 
   useEffect(() => {
-    setArticles(initialArticles);
-  }, [initialArticles]);
+    fetchNews().then((data) => {
+      setArticles(data);
+      setIsLoading(false);
+    });
+  }, []);
 
   const filtered = articles.filter(
     (a) =>
@@ -41,7 +47,7 @@ export function AdminNewsList({ articles: initialArticles }: AdminNewsListProps)
     setFormOpen(true);
   }
 
-  function handleSave(data: {
+  async function handleSave(data: {
     slug: string;
     title: string;
     excerpt: string;
@@ -49,33 +55,65 @@ export function AdminNewsList({ articles: initialArticles }: AdminNewsListProps)
     date: string;
     image?: string;
   }) {
-    const articleData: NewsArticle = {
-      ...data,
-      image: data.image || undefined,
-    };
-    if (editingArticle) {
-      setArticles((prev) =>
-        prev.map((a) => (a.slug === editingArticle.slug ? articleData : a))
-      );
-      console.log("Article updated (mock):", articleData);
-    } else {
-      setArticles((prev) => [...prev, articleData]);
-      console.log("Article added (mock):", articleData);
+    try {
+      if (editingArticle) {
+        const updated = await updateNews(editingArticle.slug, {
+          title: data.title,
+          excerpt: data.excerpt,
+          content: data.content,
+          date: data.date,
+          image: data.image || undefined,
+        });
+        if (updated) {
+          setArticles((prev) =>
+            prev.map((a) => (a.slug === editingArticle.slug ? updated : a))
+          );
+          toast.success("Article modifié");
+        } else {
+          toast.error("Erreur lors de la modification");
+        }
+      } else {
+        const created = await createNews({
+          title: data.title,
+          excerpt: data.excerpt,
+          content: data.content,
+          date: data.date,
+          image: data.image || undefined,
+        });
+        setArticles((prev) => [...prev, created]);
+        toast.success("Article ajouté");
+      }
+    } catch {
+      toast.error("Une erreur est survenue");
     }
-    // TODO: API call when backend is ready
   }
 
   function handleDeleteClick(slug: string) {
     setDeleteSlug(slug);
   }
 
-  function confirmDelete() {
-    if (deleteSlug) {
-      setArticles((prev) => prev.filter((a) => a.slug !== deleteSlug));
-      console.log("Delete article:", deleteSlug);
-      // TODO: API call when backend is ready
-      setDeleteSlug(null);
+  async function confirmDelete() {
+    if (!deleteSlug) return;
+    try {
+      const ok = await deleteNews(deleteSlug);
+      if (ok) {
+        setArticles((prev) => prev.filter((a) => a.slug !== deleteSlug));
+        toast.success("Article supprimé");
+      } else {
+        toast.error("Erreur lors de la suppression");
+      }
+    } catch {
+      toast.error("Une erreur est survenue");
     }
+    setDeleteSlug(null);
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[200px] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-luxury-accent border-t-transparent" />
+      </div>
+    );
   }
 
   return (

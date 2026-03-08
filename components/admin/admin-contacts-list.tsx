@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { Reply, Check } from "lucide-react";
+import { Reply, Check, Eye } from "lucide-react";
+import { toast } from "sonner";
 import type { MockContact } from "@/lib/data/mock-admin";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { EmptyState } from "@/components/shared/empty-state";
+import { ContactDetailDialog } from "./contact-detail-dialog";
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
+import { fetchContacts, markContactRead, deleteContact } from "@/lib/api/contacts";
 
 type ReadFilter = "all" | "unread" | "read";
 
@@ -21,26 +25,54 @@ interface AdminContactsListProps {
   contacts: MockContact[];
 }
 
-export function AdminContactsList({ contacts }: AdminContactsListProps) {
+export function AdminContactsList({ contacts: initialContacts }: AdminContactsListProps) {
+  const [contacts, setContacts] = useState<MockContact[]>(initialContacts);
+  const [isLoading, setIsLoading] = useState(true);
   const [readFilter, setReadFilter] = useState<ReadFilter>("all");
-  const [readIds, setReadIds] = useState<Set<string>>(() => new Set());
+  const [detailContact, setDetailContact] = useState<MockContact | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const contactsWithRead = useMemo(
-    () =>
-      contacts.map((c) => ({
-        ...c,
-        read: c.read || readIds.has(c.id),
-      })),
-    [contacts, readIds]
-  );
-
-  function toggleRead(id: string) {
-    setReadIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
+  useEffect(() => {
+    fetchContacts().then((data) => {
+      setContacts(data);
+      setIsLoading(false);
     });
+  }, []);
+
+  const contactsWithRead = useMemo(() => contacts, [contacts]);
+
+  async function toggleRead(id: string) {
+    try {
+      const updated = await markContactRead(id);
+      if (updated) {
+        setContacts((prev) =>
+          prev.map((c) => (c.id === id ? { ...c, read: true } : c))
+        );
+        setDetailContact((prev) => (prev?.id === id ? { ...prev, read: true } : prev));
+        toast.success("Message marqué comme lu");
+      }
+    } catch {
+      toast.error("Une erreur est survenue");
+    }
+  }
+
+  async function confirmDelete() {
+    if (!deleteId) return;
+    try {
+      const ok = await deleteContact(deleteId);
+      if (ok) {
+        setContacts((prev) => prev.filter((c) => c.id !== deleteId));
+        setDetailContact((prev) => (prev?.id === deleteId ? null : prev));
+        if (detailContact?.id === deleteId) setDetailOpen(false);
+        toast.success("Message supprimé");
+      } else {
+        toast.error("Erreur lors de la suppression");
+      }
+    } catch {
+      toast.error("Une erreur est survenue");
+    }
+    setDeleteId(null);
   }
 
   const filtered = contactsWithRead.filter((c) => {
@@ -48,6 +80,14 @@ export function AdminContactsList({ contacts }: AdminContactsListProps) {
     if (readFilter === "unread") return !c.read;
     return c.read === true;
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[200px] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-luxury-accent border-t-transparent" />
+      </div>
+    );
+  }
 
   if (contacts.length === 0) {
     return (
@@ -133,15 +173,37 @@ export function AdminContactsList({ contacts }: AdminContactsListProps) {
               <p className="text-xs text-muted-foreground">
                 {new Date(contact.createdAt).toLocaleString("fr-FR")}
               </p>
-              <Button variant="outline" size="sm" asChild>
-                <a
-                  href={`mailto:${contact.email}${contact.subject ? `?subject=Re: ${encodeURIComponent(contact.subject)}` : ""}`}
-                  className="inline-flex items-center gap-2"
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5"
+                  onClick={() => {
+                    setDetailContact(contact);
+                    setDetailOpen(true);
+                  }}
                 >
-                  <Reply className="size-4" />
-                  Répondre
-                </a>
-              </Button>
+                  <Eye className="size-4" />
+                  Voir détails
+                </Button>
+                <Button variant="outline" size="sm" asChild>
+                  <a
+                    href={`mailto:${contact.email}${contact.subject ? `?subject=Re: ${encodeURIComponent(contact.subject)}` : ""}`}
+                    className="inline-flex items-center gap-2"
+                  >
+                    <Reply className="size-4" />
+                    Répondre
+                  </a>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-destructive hover:text-destructive"
+                  onClick={() => setDeleteId(contact.id)}
+                >
+                  Supprimer
+                </Button>
+              </div>
             </div>
           </div>
         ))}
@@ -151,6 +213,23 @@ export function AdminContactsList({ contacts }: AdminContactsListProps) {
           Aucun message pour ce filtre.
         </p>
       )}
+
+      <ContactDetailDialog
+        contact={detailContact}
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        onMarkRead={toggleRead}
+      />
+
+      <ConfirmDialog
+        open={!!deleteId}
+        onOpenChange={(open) => !open && setDeleteId(null)}
+        title="Supprimer le message"
+        description="Cette action est irréversible."
+        confirmLabel="Supprimer"
+        variant="destructive"
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 }

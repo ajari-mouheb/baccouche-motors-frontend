@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { SiteChrome } from "@/components/layout/site-chrome";
+import { Providers } from "@/components/providers";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-serif",
@@ -46,9 +46,9 @@ export default function RootLayout({
       <body
         className={`${cormorant.variable} ${sourceSans.variable} antialiased min-h-screen flex flex-col font-sans`}
       >
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <Providers>
+          <SiteChrome>{children}</SiteChrome>
+        </Providers>
       </body>
     </html>
   );

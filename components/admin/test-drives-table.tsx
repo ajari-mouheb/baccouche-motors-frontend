@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Search, Check, X, CheckCircle, Eye } from "lucide-react";
+import { toast } from "sonner";
 import type { MockTestDrive } from "@/lib/data/mock-admin";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ import {
 import { EmptyState } from "@/components/shared/empty-state";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { AdminTestDriveDetailDialog } from "./admin-test-drive-detail-dialog";
+import { fetchTestDrives, updateTestDriveStatus } from "@/lib/api/test-drives";
 import Link from "next/link";
 
 const statusVariant = {
@@ -41,13 +43,22 @@ interface TestDrivesTableProps {
   testDrives: MockTestDrive[];
 }
 
-export function TestDrivesTable({ testDrives }: TestDrivesTableProps) {
+export function TestDrivesTable({ testDrives: initialTestDrives }: TestDrivesTableProps) {
+  const [testDrives, setTestDrives] = useState<MockTestDrive[]>(initialTestDrives);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [page, setPage] = useState(1);
   const [detailTestDrive, setDetailTestDrive] = useState<MockTestDrive | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [rejectConfirmId, setRejectConfirmId] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchTestDrives().then((data) => {
+      setTestDrives(data);
+      setIsLoading(false);
+    });
+  }, []);
 
   const filtered = useMemo(() => {
     let result = testDrives;
@@ -77,26 +88,65 @@ export function TestDrivesTable({ testDrives }: TestDrivesTableProps) {
     if (page > totalPages && totalPages > 0) setPage(1);
   }, [page, totalPages]);
 
-  function handleConfirm(id: string) {
-    console.log("Confirm test drive:", id);
-    // TODO: API call when backend is ready
+  async function handleConfirm(id: string) {
+    try {
+      const updated = await updateTestDriveStatus(id, "confirmed");
+      if (updated) {
+        setTestDrives((prev) =>
+          prev.map((t) => (t.id === id ? updated : t))
+        );
+        setDetailTestDrive((prev) => (prev?.id === id ? updated : prev));
+        toast.success("Demande confirmée");
+      }
+    } catch {
+      toast.error("Une erreur est survenue");
+    }
   }
 
   function handleReject(id: string) {
     setRejectConfirmId(id);
   }
 
-  function confirmReject() {
-    if (rejectConfirmId) {
-      console.log("Reject test drive:", rejectConfirmId);
-      // TODO: API call when backend is ready
-      setRejectConfirmId(null);
+  async function confirmReject() {
+    if (!rejectConfirmId) return;
+    try {
+      const updated = await updateTestDriveStatus(rejectConfirmId, "rejected");
+      if (updated) {
+        setTestDrives((prev) =>
+          prev.map((t) => (t.id === rejectConfirmId ? updated : t))
+        );
+        setDetailTestDrive((prev) =>
+          prev?.id === rejectConfirmId ? updated : prev
+        );
+        toast.success("Demande refusée");
+      }
+    } catch {
+      toast.error("Une erreur est survenue");
+    }
+    setRejectConfirmId(null);
+  }
+
+  async function handleComplete(id: string) {
+    try {
+      const updated = await updateTestDriveStatus(id, "completed");
+      if (updated) {
+        setTestDrives((prev) =>
+          prev.map((t) => (t.id === id ? updated : t))
+        );
+        setDetailTestDrive((prev) => (prev?.id === id ? updated : prev));
+        toast.success("Demande marquée comme terminée");
+      }
+    } catch {
+      toast.error("Une erreur est survenue");
     }
   }
 
-  function handleComplete(id: string) {
-    console.log("Mark completed test drive:", id);
-    // TODO: API call when backend is ready
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[200px] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-luxury-accent border-t-transparent" />
+      </div>
+    );
   }
 
   if (testDrives.length === 0) {

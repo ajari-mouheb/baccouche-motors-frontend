@@ -4,11 +4,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import { toast } from "sonner";
 import type { Car } from "@/lib/data/cars";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { CarFormDialog } from "./car-form-dialog";
+import { fetchCars, createCar, updateCar, deleteCar } from "@/lib/api/cars";
 
 interface AdminCarsGridProps {
   cars: Car[];
@@ -16,14 +18,18 @@ interface AdminCarsGridProps {
 
 export function AdminCarsGrid({ cars: initialCars }: AdminCarsGridProps) {
   const [cars, setCars] = useState<Car[]>(initialCars);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
 
   useEffect(() => {
-    setCars(initialCars);
-  }, [initialCars]);
+    fetchCars().then((data) => {
+      setCars(data);
+      setIsLoading(false);
+    });
+  }, []);
 
   const filtered = cars.filter(
     (car) =>
@@ -42,34 +48,66 @@ export function AdminCarsGrid({ cars: initialCars }: AdminCarsGridProps) {
     setFormOpen(true);
   }
 
-  function handleSave(payload: Car & { id: string; slug: string }) {
+  async function handleSave(payload: Car & { id: string; slug: string }) {
     const carData: Car = {
       ...payload,
       specs: cars.find((c) => c.id === payload.id)?.specs,
     };
-    if (editingCar) {
-      setCars((prev) =>
-        prev.map((c) => (c.id === payload.id ? carData : c))
-      );
-      console.log("Car updated (mock):", carData);
-    } else {
-      setCars((prev) => [...prev, carData]);
-      console.log("Car added (mock):", carData);
+    try {
+      if (editingCar) {
+        const updated = await updateCar(payload.id, carData);
+        if (updated) {
+          setCars((prev) =>
+            prev.map((c) => (c.id === payload.id ? updated : c))
+          );
+          toast.success("Véhicule modifié");
+        } else {
+          toast.error("Erreur lors de la modification");
+        }
+      } else {
+        const created = await createCar({
+          name: carData.name,
+          model: carData.model,
+          year: carData.year,
+          price: carData.price,
+          image: carData.image,
+          description: carData.description,
+          specs: carData.specs,
+        });
+        setCars((prev) => [...prev, created]);
+        toast.success("Véhicule ajouté");
+      }
+    } catch {
+      toast.error("Une erreur est survenue");
     }
-    // TODO: API call when backend is ready
   }
 
   function handleDeleteClick(id: string) {
     setDeleteId(id);
   }
 
-  function confirmDelete() {
-    if (deleteId) {
-      setCars((prev) => prev.filter((c) => c.id !== deleteId));
-      console.log("Delete car:", deleteId);
-      // TODO: API call when backend is ready
-      setDeleteId(null);
+  async function confirmDelete() {
+    if (!deleteId) return;
+    try {
+      const ok = await deleteCar(deleteId);
+      if (ok) {
+        setCars((prev) => prev.filter((c) => c.id !== deleteId));
+        toast.success("Véhicule supprimé");
+      } else {
+        toast.error("Erreur lors de la suppression");
+      }
+    } catch {
+      toast.error("Une erreur est survenue");
     }
+    setDeleteId(null);
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[200px] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-luxury-accent border-t-transparent" />
+      </div>
+    );
   }
 
   return (

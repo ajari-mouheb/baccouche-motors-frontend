@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { toast } from "sonner";
+import { createContact } from "@/lib/api/contacts";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -28,6 +30,7 @@ type ContactFormValues = z.infer<typeof contactSchema>;
 
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
@@ -40,10 +43,24 @@ export function ContactForm() {
     },
   });
 
-  function onSubmit(data: ContactFormValues) {
-    console.log("Contact form:", data);
-    setSubmitted(true);
-    form.reset();
+  async function onSubmit(data: ContactFormValues) {
+    setIsSubmitting(true);
+    try {
+      await createContact({
+        name: data.name,
+        email: data.email,
+        phone: data.phone || undefined,
+        subject: data.subject,
+        message: data.message,
+      });
+      setSubmitted(true);
+      form.reset();
+      toast.success("Message envoyé avec succès");
+    } catch {
+      toast.error("Une erreur est survenue. Veuillez réessayer.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (submitted) {
@@ -132,8 +149,8 @@ export function ContactForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" size="lg">
-          Envoyer
+        <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+          {isSubmitting ? "Envoi en cours..." : "Envoyer"}
         </Button>
       </form>
     </Form>

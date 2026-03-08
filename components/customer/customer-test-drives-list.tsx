@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { toast } from "sonner";
 import type { MockTestDrive } from "@/lib/data/mock-admin";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { TestDriveDetailDialog } from "./test-drive-detail-dialog";
+import { fetchTestDrives, deleteTestDrive } from "@/lib/api/test-drives";
 
 const statusVariant = {
   pending: "pending" as const,
@@ -27,27 +29,53 @@ interface CustomerTestDrivesListProps {
   testDrives: MockTestDrive[];
 }
 
-export function CustomerTestDrivesList({ testDrives }: CustomerTestDrivesListProps) {
+export function CustomerTestDrivesList({ testDrives: initialTestDrives }: CustomerTestDrivesListProps) {
+  const [testDrives, setTestDrives] = useState<MockTestDrive[]>(initialTestDrives);
+  const [isLoading, setIsLoading] = useState(true);
   const [selected, setSelected] = useState<MockTestDrive | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cancelConfirmId, setCancelConfirmId] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchTestDrives().then((data) => {
+      setTestDrives(data);
+      setIsLoading(false);
+    });
+  }, []);
 
   function handleCancelRequest(id: string) {
     setCancelConfirmId(id);
     setDialogOpen(false);
   }
 
-  function confirmCancel() {
-    if (cancelConfirmId) {
-      console.log("Cancel test drive:", cancelConfirmId);
-      // TODO: API call when backend is ready
-      setCancelConfirmId(null);
+  async function confirmCancel() {
+    if (!cancelConfirmId) return;
+    try {
+      const ok = await deleteTestDrive(cancelConfirmId);
+      if (ok) {
+        setTestDrives((prev) => prev.filter((t) => t.id !== cancelConfirmId));
+        setSelected((prev) => (prev?.id === cancelConfirmId ? null : prev));
+        toast.success("Demande annulée");
+      } else {
+        toast.error("Erreur lors de l'annulation");
+      }
+    } catch {
+      toast.error("Une erreur est survenue");
     }
+    setCancelConfirmId(null);
   }
 
   function openDetail(td: MockTestDrive) {
     setSelected(td);
     setDialogOpen(true);
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[200px] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-luxury-accent border-t-transparent" />
+      </div>
+    );
   }
 
   return (

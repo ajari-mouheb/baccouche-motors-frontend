@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { toast } from "sonner";
+import { createTestDrive } from "@/lib/api/test-drives";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -37,6 +39,7 @@ type TestDriveFormValues = z.infer<typeof testDriveSchema>;
 
 export function TestDriveForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<TestDriveFormValues>({
     resolver: zodResolver(testDriveSchema),
@@ -50,10 +53,25 @@ export function TestDriveForm() {
     },
   });
 
-  function onSubmit(data: TestDriveFormValues) {
-    console.log("Test drive request:", data);
-    setSubmitted(true);
-    form.reset();
+  async function onSubmit(data: TestDriveFormValues) {
+    setIsSubmitting(true);
+    try {
+      await createTestDrive({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        model: data.model,
+        preferredDate: data.preferredDate || undefined,
+        timeSlot: (data.timeSlot as "morning" | "afternoon") || undefined,
+      });
+      setSubmitted(true);
+      form.reset();
+      toast.success("Demande envoyée avec succès");
+    } catch {
+      toast.error("Une erreur est survenue. Veuillez réessayer.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (submitted) {
@@ -202,8 +220,9 @@ export function TestDriveForm() {
           type="submit"
           className="h-14 w-full text-base"
           size="lg"
+          disabled={isSubmitting}
         >
-          Envoyer ma demande
+          {isSubmitting ? "Envoi en cours..." : "Envoyer ma demande"}
         </Button>
       </form>
     </Form>
