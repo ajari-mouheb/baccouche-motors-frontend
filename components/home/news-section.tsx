@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -13,14 +14,32 @@ export function NewsSection() {
   const articles = getLatestNews(3);
 
   return (
-    <section className="py-16 md:py-24">
-      <div className="container mx-auto max-w-7xl px-4 md:px-6">
-        <h2 className="section-title mb-12 text-center">ACTUALITÉ</h2>
+    <section className="section-padding">
+      <div className="container mx-auto px-4 md:px-6">
+        <h2 className="section-title mb-12 text-center text-foreground">
+          Actualités
+        </h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {articles.map((article) => (
-            <Card key={article.slug} className="flex flex-col overflow-hidden">
+            <Card
+              key={article.slug}
+              className="group flex flex-col overflow-hidden rounded-2xl border-border/60 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+            >
+              {article.image && (
+                <div className="relative aspect-video w-full overflow-hidden bg-muted">
+                  <Image
+                    src={article.image}
+                    alt={article.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
+              )}
               <CardHeader>
-                <CardTitle className="line-clamp-2">{article.title}</CardTitle>
+                <CardTitle className="line-clamp-2 font-serif">
+                  {article.title}
+                </CardTitle>
                 <CardDescription>
                   {new Date(article.date).toLocaleDateString("fr-FR", {
                     year: "numeric",
@@ -30,12 +49,16 @@ export function NewsSection() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex-1">
-                <p className="text-sm text-muted-foreground line-clamp-3">
+                <p className="line-clamp-3 text-sm text-muted-foreground">
                   {article.excerpt}
                 </p>
               </CardContent>
               <CardContent className="pt-0">
-                <Button variant="link" asChild className="p-0 h-auto">
+                <Button
+                  variant="link"
+                  asChild
+                  className="h-auto p-0 text-luxury-accent hover:text-luxury-accent/80"
+                >
                   <Link href={`/actualites/${article.slug}`}>Lire la suite</Link>
                 </Button>
               </CardContent>
@@ -43,7 +66,11 @@ export function NewsSection() {
           ))}
         </div>
         <div className="mt-8 text-center">
-          <Button asChild variant="outline">
+          <Button
+            asChild
+            variant="outline"
+            className="border-luxury-accent/50 hover:border-luxury-accent hover:bg-luxury-accent/5"
+          >
             <Link href="/actualites">Voir toutes les actualités</Link>
           </Button>
         </div>

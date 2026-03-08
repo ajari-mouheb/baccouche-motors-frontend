@@ -18,7 +18,7 @@ export const cars: Car[] = [
     model: "320i",
     year: 2024,
     price: "Sur demande",
-    image: "/placeholder-car.svg",
+    image: "/bmw-placeholder.svg",
     description: "La BMW Série 3 incarne l'essence du plaisir de conduire. Conçue pour ceux qui recherchent dynamisme et élégance.",
     specs: {
       "Moteur": "4 cylindres turbo",
@@ -33,7 +33,7 @@ export const cars: Car[] = [
     model: "520i",
     year: 2024,
     price: "Sur demande",
-    image: "/placeholder-car.svg",
+    image: "/bmw-placeholder.svg",
     description: "La berline business par excellence. Confort, technologie et performance réunis.",
     specs: {
       "Moteur": "4 cylindres turbo",
@@ -48,7 +48,7 @@ export const cars: Car[] = [
     model: "xDrive20d",
     year: 2024,
     price: "Sur demande",
-    image: "/placeholder-car.svg",
+    image: "/bmw-placeholder.svg",
     description: "Le SAV compact qui allie polyvalence urbaine et capacités tout-terrain.",
     specs: {
       "Moteur": "4 cylindres diesel",
@@ -63,7 +63,7 @@ export const cars: Car[] = [
     model: "xDrive30d",
     year: 2024,
     price: "Sur demande",
-    image: "/placeholder-car.svg",
+    image: "/bmw-placeholder.svg",
     description: "Le SAV de luxe qui définit les standards en matière de confort et de performance.",
     specs: {
       "Moteur": "6 cylindres diesel",

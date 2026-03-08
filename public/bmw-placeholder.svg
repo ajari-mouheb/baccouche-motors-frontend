@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" fill="none">
+  <rect width="200" height="120" fill="#1a1a1a"/>
+  <circle cx="100" cy="60" r="35" stroke="#1c69d4" stroke-width="2" fill="none"/>
+  <text x="100" y="68" font-family="Arial,sans-serif" font-size="18" font-weight="bold" fill="#1c69d4" text-anchor="middle">BMW</text>
+</svg>

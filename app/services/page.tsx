@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { services } from "@/lib/data/services";
-import { Wrench, Shield, Car } from "lucide-react";
+import { images } from "@/lib/constants/images";
 import {
   Card,
   CardContent,
@@ -9,10 +10,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const icons = {
-  "apres-vente": Wrench,
-  garantie: Shield,
-  "premium-selection": Car,
+const serviceImageMap: Record<string, string> = {
+  "apres-vente": images.serviceAfterSale,
+  garantie: images.serviceGarantie,
+  "premium-selection": images.servicePremium,
 };
 
 export const metadata: Metadata = {
@@ -33,27 +34,34 @@ export default function ServicesPage() {
       </div>
 
       <div className="space-y-8">
-        {services.map((service) => {
-          const Icon = icons[service.id as keyof typeof icons] ?? Wrench;
-          return (
-            <Card key={service.id}>
-              <CardHeader>
-                <div className="mb-2 flex size-14 items-center justify-center rounded-lg bg-primary/10">
-                  <Icon className="size-7 text-primary" />
-                </div>
-                <CardTitle className="text-xl">{service.title}</CardTitle>
-                <CardDescription className="text-base">
-                  {service.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground leading-relaxed">
-                  {service.details}
-                </p>
-              </CardContent>
-            </Card>
-          );
-        })}
+        {services.map((service) => (
+          <Card key={service.id} className="overflow-hidden rounded-2xl border-border/60 shadow-sm">
+            <div className="grid gap-8 md:grid-cols-2">
+              <div className="relative aspect-video md:aspect-square overflow-hidden bg-muted">
+                <Image
+                  src={serviceImageMap[service.id] ?? images.serviceAfterSale}
+                  alt={service.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+              <div className="flex flex-col justify-center p-6 md:p-8">
+                <CardHeader className="p-0">
+                  <CardTitle className="text-xl font-serif">{service.title}</CardTitle>
+                  <CardDescription className="text-base">
+                    {service.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0 pt-4">
+                  <p className="text-muted-foreground leading-relaxed">
+                    {service.details}
+                  </p>
+                </CardContent>
+              </div>
+            </div>
+          </Card>
+        ))}
       </div>
     </div>
   );

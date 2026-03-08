@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cars } from "@/lib/data/cars";
+import Link from "next/link";
 
 const testDriveSchema = z.object({
   name: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
@@ -29,6 +30,7 @@ const testDriveSchema = z.object({
   email: z.string().email("Email invalide"),
   model: z.string().min(1, "Veuillez sélectionner un modèle"),
   preferredDate: z.string().optional(),
+  timeSlot: z.string().optional(),
 });
 
 type TestDriveFormValues = z.infer<typeof testDriveSchema>;
@@ -44,6 +46,7 @@ export function TestDriveForm() {
       email: "",
       model: "",
       preferredDate: "",
+      timeSlot: "",
     },
   });
 
@@ -55,14 +58,23 @@ export function TestDriveForm() {
 
   if (submitted) {
     return (
-      <div className="rounded-lg border bg-card p-8 text-center">
-        <h2 className="mb-2 font-semibold text-primary">
+      <div className="rounded-lg border border-luxury-accent/30 bg-luxury-accent/5 p-10 text-center">
+        <div
+          className="mx-auto mb-6 flex size-16 items-center justify-center rounded-full bg-luxury-accent/20 animate-in zoom-in duration-500"
+          aria-hidden
+        >
+          <span className="text-2xl font-bold text-luxury-accent">✓</span>
+        </div>
+        <h2 className="mb-2 text-xl font-semibold text-foreground">
           Demande envoyée avec succès
         </h2>
-        <p className="text-muted-foreground">
+        <p className="mb-8 text-muted-foreground">
           Notre équipe vous contactera dans les plus brefs délais pour
           organiser votre test drive.
         </p>
+        <Button asChild variant="outline" size="lg" className="w-full">
+          <Link href="/cars">Découvrir nos véhicules</Link>
+        </Button>
       </div>
     );
   }
@@ -75,9 +87,13 @@ export function TestDriveForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nom complet</FormLabel>
+              <FormLabel className="text-base">Nom complet</FormLabel>
               <FormControl>
-                <Input placeholder="Votre nom" {...field} />
+                <Input
+                  placeholder="Votre nom"
+                  className="h-12 text-base"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -88,9 +104,13 @@ export function TestDriveForm() {
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Téléphone</FormLabel>
+              <FormLabel className="text-base">Téléphone</FormLabel>
               <FormControl>
-                <Input placeholder="+216 XX XXX XXX" {...field} />
+                <Input
+                  placeholder="+216 XX XXX XXX"
+                  className="h-12 text-base"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -101,9 +121,14 @@ export function TestDriveForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-base">Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="votre@email.com" {...field} />
+                <Input
+                  type="email"
+                  placeholder="votre@email.com"
+                  className="h-12 text-base"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -114,13 +139,10 @@ export function TestDriveForm() {
           name="model"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Modèle souhaité</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-              >
+              <FormLabel className="text-base">Modèle souhaité</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12 text-base">
                     <SelectValue placeholder="Sélectionnez un modèle" />
                   </SelectTrigger>
                 </FormControl>
@@ -136,20 +158,51 @@ export function TestDriveForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="preferredDate"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Date préférée (optionnel)</FormLabel>
-              <FormControl>
-                <Input type="date" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="w-full" size="lg">
+        <div className="grid gap-6 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="preferredDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Date préférée</FormLabel>
+                <FormControl>
+                  <Input
+                    type="date"
+                    className="h-12 text-base"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="timeSlot"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Créneau</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="h-12 text-base">
+                      <SelectValue placeholder="Matin / Après-midi" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="morning">Matin (9h - 12h)</SelectItem>
+                    <SelectItem value="afternoon">Après-midi (14h - 18h)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <Button
+          type="submit"
+          className="h-14 w-full text-base"
+          size="lg"
+        >
           Envoyer ma demande
         </Button>
       </form>

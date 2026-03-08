@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import Image from "next/image";
 
 const footerLinks = [
   { href: "/", label: "Accueil" },
@@ -9,31 +9,49 @@ const footerLinks = [
   { href: "/actualites", label: "Actualités" },
   { href: "/contact", label: "Contact" },
   { href: "/test-drive", label: "Test Drive" },
+  { href: "/admin", label: "Admin" },
+  { href: "/customer", label: "Espace client" },
 ];
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t bg-muted/30">
-      <div className="container px-4 py-12 md:px-6">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+    <footer
+      className="border-t border-white/10 text-primary-foreground"
+      style={{
+        background:
+          "linear-gradient(180deg, oklch(0.1 0.02 265) 0%, oklch(0.08 0.02 265) 100%)",
+      }}
+    >
+      <div className="container px-4 py-16 md:px-6">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
-            <h3 className="font-semibold">Baccouche Automobiles</h3>
-            <p className="text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/logo.png"
+                alt="Baccouche Automobiles"
+                width={120}
+                height={36}
+                className="h-9 w-auto object-contain brightness-0 invert opacity-95"
+              />
+            </div>
+            <p className="text-sm text-primary-foreground/80 leading-relaxed">
               Premier concessionnaire BMW à Sousse, agent agréé par Ben Jemâa
               Motors, importateur officiel de la marque BMW en Tunisie.
             </p>
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold">Liens rapides</h3>
+            <h3 className="font-serif text-lg font-semibold tracking-wide">
+              Liens rapides
+            </h3>
             <ul className="space-y-2">
               {footerLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-sm text-primary-foreground/80 hover:text-luxury-accent transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -43,45 +61,55 @@ export function Footer() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold">Contact</h3>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li className="flex items-start gap-2">
-                <MapPin className="size-4 mt-0.5 shrink-0" />
+            <h3 className="font-serif text-lg font-semibold tracking-wide">
+              Contact
+            </h3>
+            <ul className="space-y-3 text-sm text-primary-foreground/80">
+              <li>
+                <span className="block font-medium text-primary-foreground">Adresse</span>
                 <span>
                   Route Ceinture Oued Arouk
                   <br />
                   Akouda, Sousse, Tunisie
                 </span>
               </li>
-              <li className="flex items-center gap-2">
-                <Phone className="size-4 shrink-0" />
-                <a href="tel:+216" className="hover:text-foreground">
-                  +216 XX XXX XXX
+              <li>
+                <span className="block font-medium text-primary-foreground">Tél</span>
+                <a
+                  href="tel:+21670220300"
+                  className="hover:text-luxury-accent transition-colors"
+                >
+                  +216 70 220 300
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <Mail className="size-4 shrink-0" />
-                <a href="mailto:contact@baccoucheautomobiles.tn" className="hover:text-foreground">
+              <li>
+                <span className="block font-medium text-primary-foreground">Email</span>
+                <a
+                  href="mailto:contact@baccoucheautomobiles.tn"
+                  className="hover:text-luxury-accent transition-colors"
+                >
                   contact@baccoucheautomobiles.tn
                 </a>
               </li>
-              <li className="flex items-start gap-2">
-                <Clock className="size-4 mt-0.5 shrink-0" />
+              <li>
+                <span className="block font-medium text-primary-foreground">Horaires</span>
                 <span>Lun - Sam: 8h00 - 18h00</span>
               </li>
             </ul>
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold">BMW Sousse</h3>
-            <p className="text-sm text-muted-foreground">
+            <h3 className="font-serif text-lg font-semibold tracking-wide">
+              BMW Sousse
+            </h3>
+            <p className="text-sm text-primary-foreground/80 leading-relaxed">
               Showroom, pièces détachées et service après-vente. Plus de 5000
               m² dédiés à l&apos;excellence automobile.
             </p>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
+        <div className="mt-12 pt-8 border-t border-white/10 text-center text-sm text-primary-foreground/70">
           <p>
             © {currentYear} Baccouche Automobiles. Tous droits réservés. | BMW
             Sousse - Agent agréé Ben Jemâa Motors
