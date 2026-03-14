@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import type { Car } from "@/lib/data/cars";
+import type { Car } from "@/lib/types";
 import {
   Dialog,
   DialogContent,

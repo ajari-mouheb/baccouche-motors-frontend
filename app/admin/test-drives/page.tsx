@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { mockTestDrives } from "@/lib/data/mock-admin";
 import { TestDrivesTable } from "@/components/admin/test-drives-table";
 
 export const metadata: Metadata = {
@@ -11,7 +10,7 @@ export default function AdminTestDrivesPage() {
   return (
     <div className="p-6 md:p-8">
       <h1 className="section-title mb-8">Demandes Test Drive</h1>
-      <TestDrivesTable testDrives={mockTestDrives} />
+      <TestDrivesTable />
     </div>
   );
 }

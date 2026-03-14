@@ -1,13 +1,8 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
-import { mockTestDrives } from "@/lib/data/mock-admin";
 import { Button } from "@/components/ui/button";
 import { CustomerTestDrivesList } from "@/components/customer/customer-test-drives-list";
-
-export const metadata: Metadata = {
-  title: "Mes Test Drives | Espace client - Baccouche Automobiles",
-  description: "Vos demandes de test drive",
-};
 
 export default function CustomerTestDrivesPage() {
   return (
@@ -18,7 +13,7 @@ export default function CustomerTestDrivesPage() {
           <Link href="/test-drive">Nouvelle demande</Link>
         </Button>
       </div>
-      <CustomerTestDrivesList testDrives={mockTestDrives} />
+      <CustomerTestDrivesList />
     </div>
   );
 }

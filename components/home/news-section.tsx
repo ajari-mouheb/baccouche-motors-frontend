@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -8,10 +10,32 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { getLatestNews } from "@/lib/data/news";
+import { useNews } from "@/lib/hooks/use-news";
 
 export function NewsSection() {
-  const articles = getLatestNews(3);
+  const { data: articles, isLoading } = useNews();
+
+  const latestArticles = [...(articles ?? [])]
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 3);
+
+  if (isLoading) {
+    return (
+      <section className="section-padding">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="mb-12 h-10 w-48 animate-pulse rounded bg-muted mx-auto" />
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="h-64 animate-pulse rounded-2xl border border-border bg-card"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="section-padding">
@@ -20,7 +44,7 @@ export function NewsSection() {
           Actualités
         </h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {articles.map((article) => (
+          {latestArticles.map((article) => (
             <Card
               key={article.slug}
               className="group flex flex-col overflow-hidden rounded-2xl border-border/60 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"

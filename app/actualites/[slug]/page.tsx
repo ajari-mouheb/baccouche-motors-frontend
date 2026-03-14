@@ -1,33 +1,39 @@
+"use client";
+
+import { use } from "react";
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
-import { getNewsBySlug, newsArticles } from "@/lib/data/news";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useNewsBySlug } from "@/lib/hooks/use-news";
 
 interface NewsPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  return newsArticles.map((article) => ({ slug: article.slug }));
-}
+export default function NewsDetailPage({ params }: NewsPageProps) {
+  const { slug } = use(params);
 
-export async function generateMetadata({
-  params,
-}: NewsPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const article = getNewsBySlug(slug);
-  if (!article) return {};
-  return {
-    title: `${article.title} | Baccouche Automobiles`,
-    description: article.excerpt,
-  };
-}
+  const { data: article, isLoading, isError } = useNewsBySlug(slug);
 
-export default async function NewsDetailPage({ params }: NewsPageProps) {
-  const { slug } = await params;
-  const article = getNewsBySlug(slug);
-  if (!article) notFound();
+  if (!slug) return null;
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto max-w-3xl px-4 py-16 md:px-6 md:py-24">
+        <div className="mb-8 h-6 w-48 animate-pulse rounded bg-muted" />
+        <div className="mb-8 h-12 w-full animate-pulse rounded bg-muted" />
+        <div className="space-y-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-4 w-full animate-pulse rounded bg-muted" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !article) {
+    notFound();
+  }
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-16 md:px-6 md:py-24">

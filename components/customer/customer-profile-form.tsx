@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { User, Lock } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
-import { updateProfile, changePassword } from "@/lib/api/auth";
+import { useUpdateMe, useChangePassword } from "@/lib/hooks/use-customers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -41,8 +41,8 @@ type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 export function CustomerProfileForm() {
   const { user, updateUser } = useAuth();
-  const [isProfileSaving, setIsProfileSaving] = useState(false);
-  const [isPasswordSaving, setIsPasswordSaving] = useState(false);
+  const updateMe = useUpdateMe();
+  const changePassword = useChangePassword();
 
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -74,9 +74,8 @@ export function CustomerProfileForm() {
 
   async function onProfileSubmit(values: ProfileFormValues) {
     if (!user) return;
-    setIsProfileSaving(true);
     try {
-      const updated = await updateProfile(user.id, {
+      const updated = await updateMe.mutateAsync({
         name: values.name,
         phone: values.phone || undefined,
         address: values.address || undefined,
@@ -90,18 +89,15 @@ export function CustomerProfileForm() {
     } catch {
       toast.error("Une erreur est survenue");
     }
-    setIsProfileSaving(false);
   }
 
   async function onPasswordSubmit(values: PasswordFormValues) {
     if (!user) return;
-    setIsPasswordSaving(true);
     try {
-      const result = await changePassword(
-        user.id,
-        values.currentPassword,
-        values.newPassword
-      );
+      const result = await changePassword.mutateAsync({
+        currentPassword: values.currentPassword,
+        newPassword: values.newPassword,
+      });
       if (result.success) {
         toast.success("Mot de passe modifié");
         passwordForm.reset();
@@ -111,7 +107,6 @@ export function CustomerProfileForm() {
     } catch {
       toast.error("Une erreur est survenue");
     }
-    setIsPasswordSaving(false);
   }
 
   return (
@@ -185,8 +180,8 @@ export function CustomerProfileForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isProfileSaving}>
-              {isProfileSaving ? "Enregistrement..." : "Enregistrer"}
+            <Button type="submit" disabled={updateMe.isPending}>
+              {updateMe.isPending ? "Enregistrement..." : "Enregistrer"}
             </Button>
           </form>
         </Form>
@@ -248,8 +243,12 @@ export function CustomerProfileForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" variant="outline" disabled={isPasswordSaving}>
-              {isPasswordSaving ? "Modification..." : "Changer le mot de passe"}
+            <Button
+              type="submit"
+              variant="outline"
+              disabled={changePassword.isPending}
+            >
+              {changePassword.isPending ? "Modification..." : "Changer le mot de passe"}
             </Button>
           </form>
         </Form>

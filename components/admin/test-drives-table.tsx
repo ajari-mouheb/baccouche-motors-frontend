@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { Search, Check, X, CheckCircle, Eye } from "lucide-react";
 import { toast } from "sonner";
-import type { MockTestDrive } from "@/lib/data/mock-admin";
+import type { TestDrive } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,47 +18,42 @@ import {
 import { EmptyState } from "@/components/shared/empty-state";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { AdminTestDriveDetailDialog } from "./admin-test-drive-detail-dialog";
-import { fetchTestDrives, updateTestDriveStatus } from "@/lib/api/test-drives";
+import {
+  useTestDrives,
+  useUpdateTestDriveStatus,
+} from "@/lib/hooks/use-test-drives";
 import Link from "next/link";
 
-const statusVariant = {
-  pending: "pending" as const,
-  confirmed: "confirmed" as const,
-  completed: "completed" as const,
-  rejected: "rejected" as const,
+const statusVariant: Record<string, "pending" | "confirmed" | "completed" | "rejected" | "destructive"> = {
+  pending: "pending",
+  confirmed: "confirmed",
+  completed: "completed",
+  rejected: "rejected",
+  cancelled: "destructive",
 };
 
-const statusLabel = {
+const statusLabel: Record<string, string> = {
   pending: "En attente",
   confirmed: "Confirmé",
   completed: "Terminé",
   rejected: "Refusé",
+  cancelled: "Annulé",
 };
 
-type StatusFilter = "all" | "pending" | "confirmed" | "completed" | "rejected";
+type StatusFilter = "all" | "pending" | "confirmed" | "completed" | "rejected" | "cancelled";
 
 const PAGE_SIZE = 5;
 
-interface TestDrivesTableProps {
-  testDrives: MockTestDrive[];
-}
+export function TestDrivesTable() {
+  const { data: testDrives = [], isLoading } = useTestDrives();
+  const updateStatus = useUpdateTestDriveStatus();
 
-export function TestDrivesTable({ testDrives: initialTestDrives }: TestDrivesTableProps) {
-  const [testDrives, setTestDrives] = useState<MockTestDrive[]>(initialTestDrives);
-  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [page, setPage] = useState(1);
-  const [detailTestDrive, setDetailTestDrive] = useState<MockTestDrive | null>(null);
+  const [detailTestDrive, setDetailTestDrive] = useState<TestDrive | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [rejectConfirmId, setRejectConfirmId] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchTestDrives().then((data) => {
-      setTestDrives(data);
-      setIsLoading(false);
-    });
-  }, []);
 
   const filtered = useMemo(() => {
     let result = testDrives;
@@ -90,11 +85,11 @@ export function TestDrivesTable({ testDrives: initialTestDrives }: TestDrivesTab
 
   async function handleConfirm(id: string) {
     try {
-      const updated = await updateTestDriveStatus(id, "confirmed");
+      const updated = await updateStatus.mutateAsync({
+        id,
+        status: "confirmed",
+      });
       if (updated) {
-        setTestDrives((prev) =>
-          prev.map((t) => (t.id === id ? updated : t))
-        );
         setDetailTestDrive((prev) => (prev?.id === id ? updated : prev));
         toast.success("Demande confirmée");
       }
@@ -110,11 +105,11 @@ export function TestDrivesTable({ testDrives: initialTestDrives }: TestDrivesTab
   async function confirmReject() {
     if (!rejectConfirmId) return;
     try {
-      const updated = await updateTestDriveStatus(rejectConfirmId, "rejected");
+      const updated = await updateStatus.mutateAsync({
+        id: rejectConfirmId,
+        status: "rejected",
+      });
       if (updated) {
-        setTestDrives((prev) =>
-          prev.map((t) => (t.id === rejectConfirmId ? updated : t))
-        );
         setDetailTestDrive((prev) =>
           prev?.id === rejectConfirmId ? updated : prev
         );
@@ -128,11 +123,11 @@ export function TestDrivesTable({ testDrives: initialTestDrives }: TestDrivesTab
 
   async function handleComplete(id: string) {
     try {
-      const updated = await updateTestDriveStatus(id, "completed");
+      const updated = await updateStatus.mutateAsync({
+        id,
+        status: "completed",
+      });
       if (updated) {
-        setTestDrives((prev) =>
-          prev.map((t) => (t.id === id ? updated : t))
-        );
         setDetailTestDrive((prev) => (prev?.id === id ? updated : prev));
         toast.success("Demande marquée comme terminée");
       }
@@ -206,13 +201,16 @@ export function TestDrivesTable({ testDrives: initialTestDrives }: TestDrivesTab
             </tr>
           </thead>
           <tbody>
-              {paginated.length === 0 ? (
+            {paginated.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-12 text-center text-muted-foreground">
+                <td
+                  colSpan={7}
+                  className="px-4 py-12 text-center text-muted-foreground"
+                >
                   Aucun résultat pour cette recherche.
                 </td>
               </tr>
-              ) : (
+            ) : (
               paginated.map((td) => (
                 <tr key={td.id} className="border-b border-border/50">
                   <td className="px-4 py-3 font-medium">{td.name}</td>
@@ -276,7 +274,8 @@ export function TestDrivesTable({ testDrives: initialTestDrives }: TestDrivesTab
                           <CheckCircle className="size-4" />
                         </Button>
                       )}
-                      {(td.status === "completed" || td.status === "rejected") && (
+                      {(td.status === "completed" ||
+                        td.status === "rejected") && (
                         <span className="text-xs text-muted-foreground">—</span>
                       )}
                     </div>
@@ -301,7 +300,7 @@ export function TestDrivesTable({ testDrives: initialTestDrives }: TestDrivesTab
         open={detailOpen}
         onOpenChange={setDetailOpen}
         onConfirm={handleConfirm}
-        onReject={(id) => handleReject(id)}
+        onReject={handleReject}
         onComplete={handleComplete}
       />
 

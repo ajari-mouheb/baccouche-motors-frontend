@@ -1,4 +1,4 @@
-import type { Car } from "@/lib/data/cars";
+import type { Car } from "@/lib/types";
 import { CarCard } from "./car-card";
 
 interface CarGridProps {

@@ -20,8 +20,14 @@ export function AuthGuard({ children, requiredRole, loginPath }: AuthGuardProps)
   useEffect(() => {
     if (isLoading) return;
 
-    const isLoginPage = pathname === loginPath || pathname === "/admin/login" || pathname === "/customer/login" || pathname === "/customer/register";
-    if (isLoginPage) return;
+    const isPublicAuthPage =
+      pathname === loginPath ||
+      pathname === "/admin/login" ||
+      pathname === "/customer/login" ||
+      pathname === "/customer/register" ||
+      pathname === "/customer/forgot-password" ||
+      pathname === "/customer/reset-password";
+    if (isPublicAuthPage) return;
 
     if (!user) {
       router.replace(`${loginPath}?redirect=${encodeURIComponent(pathname)}`);
@@ -45,8 +51,14 @@ export function AuthGuard({ children, requiredRole, loginPath }: AuthGuardProps)
     );
   }
 
-  const isLoginPage = pathname === loginPath || pathname === "/admin/login" || pathname === "/customer/login" || pathname === "/customer/register";
-  if (isLoginPage) return <>{children}</>;
+  const isPublicAuthPage =
+    pathname === loginPath ||
+    pathname === "/admin/login" ||
+    pathname === "/customer/login" ||
+    pathname === "/customer/register" ||
+    pathname === "/customer/forgot-password" ||
+    pathname === "/customer/reset-password";
+  if (isPublicAuthPage) return <>{children}</>;
 
   if (!user || (requiredRole && user.role !== requiredRole)) {
     return null;

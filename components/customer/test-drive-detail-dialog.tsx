@@ -1,6 +1,6 @@
 "use client";
 
-import type { MockTestDrive } from "@/lib/data/mock-admin";
+import type { TestDrive } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,18 +10,20 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const statusVariant = {
-  pending: "pending" as const,
-  confirmed: "confirmed" as const,
-  completed: "completed" as const,
-  rejected: "rejected" as const,
+const statusVariant: Record<string, "pending" | "confirmed" | "completed" | "rejected" | "destructive"> = {
+  pending: "pending",
+  confirmed: "confirmed",
+  completed: "completed",
+  rejected: "rejected",
+  cancelled: "destructive",
 };
 
-const statusLabel = {
+const statusLabel: Record<string, string> = {
   pending: "En attente",
   confirmed: "Confirmé",
   completed: "Terminé",
   rejected: "Refusé",
+  cancelled: "Annulé",
 };
 
 const timeSlotLabel: Record<string, string> = {
@@ -30,7 +32,7 @@ const timeSlotLabel: Record<string, string> = {
 };
 
 interface TestDriveDetailDialogProps {
-  testDrive: MockTestDrive | null;
+  testDrive: TestDrive | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onCancel?: (id: string) => void;

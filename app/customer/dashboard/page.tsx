@@ -1,17 +1,15 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
 import { Car, CarFront, CalendarPlus, Mail } from "lucide-react";
-import { mockTestDrives } from "@/lib/data/mock-admin";
-
-export const metadata: Metadata = {
-  title: "Tableau de bord | Espace client - Baccouche Automobiles",
-  description: "Votre espace client",
-};
+import { useTestDrives } from "@/lib/hooks/use-test-drives";
 
 export default function CustomerDashboardPage() {
-  const pendingCount = mockTestDrives.filter((t) => t.status === "pending").length;
-  const lastRequest = mockTestDrives[0]
-    ? new Date(mockTestDrives[0].createdAt).toLocaleDateString("fr-FR")
+  const { data: testDrives = [] } = useTestDrives();
+
+  const pendingCount = testDrives.filter((t) => t.status === "pending").length;
+  const lastRequest = testDrives[0]
+    ? new Date(testDrives[0].createdAt).toLocaleDateString("fr-FR")
     : null;
 
   return (

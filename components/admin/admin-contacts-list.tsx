@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Reply, Check, Eye } from "lucide-react";
 import { toast } from "sonner";
-import type { MockContact } from "@/lib/data/mock-admin";
+import type { Contact } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,39 +17,42 @@ import {
 import { EmptyState } from "@/components/shared/empty-state";
 import { ContactDetailDialog } from "./contact-detail-dialog";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
-import { fetchContacts, markContactRead, deleteContact } from "@/lib/api/contacts";
+import {
+  useContacts,
+  useUpdateContact,
+  useDeleteContact,
+} from "@/lib/hooks/use-contacts";
 
 type ReadFilter = "all" | "unread" | "read";
 
-interface AdminContactsListProps {
-  contacts: MockContact[];
-}
+export function AdminContactsList() {
+  const { data: contacts = [], isLoading } = useContacts();
+  const updateContact = useUpdateContact();
+  const deleteContact = useDeleteContact();
 
-export function AdminContactsList({ contacts: initialContacts }: AdminContactsListProps) {
-  const [contacts, setContacts] = useState<MockContact[]>(initialContacts);
-  const [isLoading, setIsLoading] = useState(true);
   const [readFilter, setReadFilter] = useState<ReadFilter>("all");
-  const [detailContact, setDetailContact] = useState<MockContact | null>(null);
+  const [detailContact, setDetailContact] = useState<Contact | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchContacts().then((data) => {
-      setContacts(data);
-      setIsLoading(false);
-    });
-  }, []);
-
-  const contactsWithRead = useMemo(() => contacts, [contacts]);
+  const filtered = useMemo(
+    () =>
+      contacts.filter((c) => {
+        if (readFilter === "all") return true;
+        if (readFilter === "unread") return !c.read;
+        return c.read === true;
+      }),
+    [contacts, readFilter]
+  );
 
   async function toggleRead(id: string) {
     try {
-      const updated = await markContactRead(id);
+      const updated = await updateContact.mutateAsync({
+        id,
+        data: { read: true },
+      });
       if (updated) {
-        setContacts((prev) =>
-          prev.map((c) => (c.id === id ? { ...c, read: true } : c))
-        );
-        setDetailContact((prev) => (prev?.id === id ? { ...prev, read: true } : prev));
+        setDetailContact((prev) => (prev?.id === id ? updated : prev));
         toast.success("Message marqué comme lu");
       }
     } catch {
@@ -60,9 +63,8 @@ export function AdminContactsList({ contacts: initialContacts }: AdminContactsLi
   async function confirmDelete() {
     if (!deleteId) return;
     try {
-      const ok = await deleteContact(deleteId);
+      const ok = await deleteContact.mutateAsync(deleteId);
       if (ok) {
-        setContacts((prev) => prev.filter((c) => c.id !== deleteId));
         setDetailContact((prev) => (prev?.id === deleteId ? null : prev));
         if (detailContact?.id === deleteId) setDetailOpen(false);
         toast.success("Message supprimé");
@@ -74,12 +76,6 @@ export function AdminContactsList({ contacts: initialContacts }: AdminContactsLi
     }
     setDeleteId(null);
   }
-
-  const filtered = contactsWithRead.filter((c) => {
-    if (readFilter === "all") return true;
-    if (readFilter === "unread") return !c.read;
-    return c.read === true;
-  });
 
   if (isLoading) {
     return (

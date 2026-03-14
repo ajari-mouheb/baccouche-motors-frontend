@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import type { Car } from "@/lib/data/cars";
+import type { Car } from "@/lib/types";
 import {
   Card,
   CardContent,
@@ -15,20 +15,25 @@ interface CarCardProps {
   car: Car;
 }
 
+function getCarDisplayName(car: Car): string {
+  return car.name ?? (car.make ? `${car.make} ${car.model}` : car.model);
+}
+
 export function CarCard({ car }: CarCardProps) {
+  const displayName = getCarDisplayName(car);
   return (
     <Card className="flex flex-col overflow-hidden transition-shadow hover:shadow-md">
       <div className="relative aspect-video w-full bg-muted">
         <Image
           src={car.image}
-          alt={car.name}
+          alt={displayName}
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </div>
       <CardHeader>
-        <CardTitle>{car.name}</CardTitle>
+        <CardTitle>{displayName}</CardTitle>
         <CardDescription>
           {car.model} • {car.year}
         </CardDescription>

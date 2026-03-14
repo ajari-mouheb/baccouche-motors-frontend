@@ -5,7 +5,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { createTestDrive } from "@/lib/api/test-drives";
+import { useAuth } from "@/lib/auth-context";
+import { useCreateTestDrive } from "@/lib/hooks/use-test-drives";
+import { useCars } from "@/lib/hooks/use-cars";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -23,54 +25,88 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cars } from "@/lib/data/cars";
+import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 
-const testDriveSchema = z.object({
+const guestSchema = z.object({
   name: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
   phone: z.string().min(8, "Numéro de téléphone invalide"),
   email: z.string().email("Email invalide"),
   model: z.string().min(1, "Veuillez sélectionner un modèle"),
-  preferredDate: z.string().optional(),
-  timeSlot: z.string().optional(),
+  preferredDate: z.string().min(1, "La date est requise"),
+  timeSlot: z.enum(["morning", "afternoon"], {
+    error: "Veuillez sélectionner un créneau",
+  }),
 });
 
-type TestDriveFormValues = z.infer<typeof testDriveSchema>;
+const loggedInSchema = z.object({
+  carId: z.string().min(1, "Veuillez sélectionner un véhicule"),
+  scheduledAt: z.string().min(1, "La date et l'heure sont requises"),
+  notes: z.string().optional(),
+});
+
+type GuestFormValues = z.infer<typeof guestSchema>;
+type LoggedInFormValues = z.infer<typeof loggedInSchema>;
 
 export function TestDriveForm() {
   const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user } = useAuth();
+  const { data: cars = [] } = useCars();
+  const createTestDrive = useCreateTestDrive();
+  const isLoggedIn = !!user;
 
-  const form = useForm<TestDriveFormValues>({
-    resolver: zodResolver(testDriveSchema),
+  const guestForm = useForm<GuestFormValues>({
+    resolver: zodResolver(guestSchema),
     defaultValues: {
       name: "",
       phone: "",
       email: "",
       model: "",
       preferredDate: "",
-      timeSlot: "",
+      timeSlot: undefined,
     },
   });
 
-  async function onSubmit(data: TestDriveFormValues) {
-    setIsSubmitting(true);
+  const loggedInForm = useForm<LoggedInFormValues>({
+    resolver: zodResolver(loggedInSchema),
+    defaultValues: {
+      carId: "",
+      scheduledAt: "",
+      notes: "",
+    },
+  });
+
+  async function onGuestSubmit(data: GuestFormValues) {
     try {
-      await createTestDrive({
+      const selectedCar = cars.find((c) => c.slug === data.model);
+      await createTestDrive.mutateAsync({
         name: data.name,
         email: data.email,
         phone: data.phone,
-        model: data.model,
-        preferredDate: data.preferredDate || undefined,
-        timeSlot: (data.timeSlot as "morning" | "afternoon") || undefined,
+        model: selectedCar ? `${selectedCar.name} ${selectedCar.model}` : data.model,
+        preferredDate: data.preferredDate,
+        timeSlot: data.timeSlot,
       });
       setSubmitted(true);
-      form.reset();
+      guestForm.reset();
       toast.success("Demande envoyée avec succès");
     } catch {
       toast.error("Une erreur est survenue. Veuillez réessayer.");
-    } finally {
-      setIsSubmitting(false);
+    }
+  }
+
+  async function onLoggedInSubmit(data: LoggedInFormValues) {
+    try {
+      await createTestDrive.mutateAsync({
+        carId: data.carId,
+        scheduledAt: new Date(data.scheduledAt).toISOString(),
+        notes: data.notes || undefined,
+      });
+      setSubmitted(true);
+      loggedInForm.reset();
+      toast.success("Test drive réservé avec succès");
+    } catch {
+      toast.error("Une erreur est survenue. Veuillez réessayer.");
     }
   }
 
@@ -97,11 +133,90 @@ export function TestDriveForm() {
     );
   }
 
+  if (isLoggedIn) {
+    return (
+      <Form {...loggedInForm}>
+        <form
+          onSubmit={loggedInForm.handleSubmit(onLoggedInSubmit)}
+          className="space-y-6"
+        >
+          <FormField
+            control={loggedInForm.control}
+            name="carId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Véhicule</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="h-12 text-base">
+                      <SelectValue placeholder="Sélectionnez un véhicule" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {cars.map((car) => (
+                      <SelectItem key={car.id} value={car.id}>
+                        {car.name} {car.model}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={loggedInForm.control}
+            name="scheduledAt"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Date et heure souhaitées</FormLabel>
+                <FormControl>
+                  <Input
+                    type="datetime-local"
+                    className="h-12 text-base"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={loggedInForm.control}
+            name="notes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Notes (optionnel)</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Informations complémentaires..."
+                    rows={3}
+                    className="resize-none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            type="submit"
+            className="h-14 w-full text-base"
+            size="lg"
+            disabled={createTestDrive.isPending}
+          >
+            {createTestDrive.isPending ? "Envoi en cours..." : "Réserver mon test drive"}
+          </Button>
+        </form>
+      </Form>
+    );
+  }
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <Form {...guestForm}>
+      <form onSubmit={guestForm.handleSubmit(onGuestSubmit)} className="space-y-6">
         <FormField
-          control={form.control}
+          control={guestForm.control}
           name="name"
           render={({ field }) => (
             <FormItem>
@@ -118,7 +233,7 @@ export function TestDriveForm() {
           )}
         />
         <FormField
-          control={form.control}
+          control={guestForm.control}
           name="phone"
           render={({ field }) => (
             <FormItem>
@@ -135,7 +250,7 @@ export function TestDriveForm() {
           )}
         />
         <FormField
-          control={form.control}
+          control={guestForm.control}
           name="email"
           render={({ field }) => (
             <FormItem>
@@ -153,7 +268,7 @@ export function TestDriveForm() {
           )}
         />
         <FormField
-          control={form.control}
+          control={guestForm.control}
           name="model"
           render={({ field }) => (
             <FormItem>
@@ -178,7 +293,7 @@ export function TestDriveForm() {
         />
         <div className="grid gap-6 sm:grid-cols-2">
           <FormField
-            control={form.control}
+            control={guestForm.control}
             name="preferredDate"
             render={({ field }) => (
               <FormItem>
@@ -195,7 +310,7 @@ export function TestDriveForm() {
             )}
           />
           <FormField
-            control={form.control}
+            control={guestForm.control}
             name="timeSlot"
             render={({ field }) => (
               <FormItem>
@@ -220,9 +335,9 @@ export function TestDriveForm() {
           type="submit"
           className="h-14 w-full text-base"
           size="lg"
-          disabled={isSubmitting}
+          disabled={createTestDrive.isPending}
         >
-          {isSubmitting ? "Envoi en cours..." : "Envoyer ma demande"}
+          {createTestDrive.isPending ? "Envoi en cours..." : "Envoyer ma demande"}
         </Button>
       </form>
     </Form>

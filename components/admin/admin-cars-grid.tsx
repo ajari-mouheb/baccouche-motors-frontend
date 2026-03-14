@@ -1,35 +1,32 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { toast } from "sonner";
-import type { Car } from "@/lib/data/cars";
+import type { Car } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { CarFormDialog } from "./car-form-dialog";
-import { fetchCars, createCar, updateCar, deleteCar } from "@/lib/api/cars";
+import {
+  useCars,
+  useCreateCar,
+  useUpdateCar,
+  useDeleteCar,
+} from "@/lib/hooks/use-cars";
 
-interface AdminCarsGridProps {
-  cars: Car[];
-}
+export function AdminCarsGrid() {
+  const { data: cars = [], isLoading } = useCars();
+  const createCar = useCreateCar();
+  const updateCar = useUpdateCar();
+  const deleteCar = useDeleteCar();
 
-export function AdminCarsGrid({ cars: initialCars }: AdminCarsGridProps) {
-  const [cars, setCars] = useState<Car[]>(initialCars);
-  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
-
-  useEffect(() => {
-    fetchCars().then((data) => {
-      setCars(data);
-      setIsLoading(false);
-    });
-  }, []);
 
   const filtered = cars.filter(
     (car) =>
@@ -48,34 +45,41 @@ export function AdminCarsGrid({ cars: initialCars }: AdminCarsGridProps) {
     setFormOpen(true);
   }
 
-  async function handleSave(payload: Car & { id: string; slug: string }) {
-    const carData: Car = {
-      ...payload,
-      specs: cars.find((c) => c.id === payload.id)?.specs,
-    };
+  async function handleSave(
+    payload: Car & { id: string; slug: string }
+  ) {
     try {
       if (editingCar) {
-        const updated = await updateCar(payload.id, carData);
+        const updated = await updateCar.mutateAsync({
+          id: payload.id,
+          data: {
+            name: payload.name,
+            model: payload.model,
+            year: payload.year,
+            price: payload.price,
+            image: payload.image,
+            description: payload.description,
+            specs: payload.specs ?? editingCar.specs,
+          },
+        });
         if (updated) {
-          setCars((prev) =>
-            prev.map((c) => (c.id === payload.id ? updated : c))
-          );
           toast.success("Véhicule modifié");
+          setFormOpen(false);
         } else {
           toast.error("Erreur lors de la modification");
         }
       } else {
-        const created = await createCar({
-          name: carData.name,
-          model: carData.model,
-          year: carData.year,
-          price: carData.price,
-          image: carData.image,
-          description: carData.description,
-          specs: carData.specs,
+        await createCar.mutateAsync({
+          name: payload.name,
+          model: payload.model,
+          year: payload.year,
+          price: payload.price,
+          image: payload.image,
+          description: payload.description,
+          specs: payload.specs,
         });
-        setCars((prev) => [...prev, created]);
         toast.success("Véhicule ajouté");
+        setFormOpen(false);
       }
     } catch {
       toast.error("Une erreur est survenue");
@@ -89,9 +93,8 @@ export function AdminCarsGrid({ cars: initialCars }: AdminCarsGridProps) {
   async function confirmDelete() {
     if (!deleteId) return;
     try {
-      const ok = await deleteCar(deleteId);
+      const ok = await deleteCar.mutateAsync(deleteId);
       if (ok) {
-        setCars((prev) => prev.filter((c) => c.id !== deleteId));
         toast.success("Véhicule supprimé");
       } else {
         toast.error("Erreur lors de la suppression");
@@ -133,10 +136,7 @@ export function AdminCarsGrid({ cars: initialCars }: AdminCarsGridProps) {
             key={car.id}
             className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:shadow-md"
           >
-            <Link
-              href={`/cars/${car.slug}`}
-              className="block"
-            >
+            <Link href={`/cars/${car.slug}`} className="block">
               <div className="relative aspect-[4/3] overflow-hidden bg-muted">
                 <Image
                   src={car.image}

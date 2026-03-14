@@ -1,6 +1,6 @@
 "use client";
 
-import type { MockContact } from "@/lib/data/mock-admin";
+import type { Contact } from "@/lib/types";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 interface ContactDetailDialogProps {
-  contact: MockContact | null;
+  contact: Contact | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onMarkRead?: (id: string) => void;

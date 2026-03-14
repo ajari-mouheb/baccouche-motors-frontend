@@ -4,7 +4,12 @@ import { usePathname } from "next/navigation";
 import { CustomerSidebar } from "@/components/customer/customer-sidebar";
 import { CustomerHeader } from "@/components/customer/customer-header";
 
-const CUSTOMER_AUTH_PATHS = ["/customer/login", "/customer/register"];
+const CUSTOMER_AUTH_PATHS = [
+  "/customer/login",
+  "/customer/register",
+  "/customer/forgot-password",
+  "/customer/reset-password",
+];
 
 export function CustomerLayoutChrome({
   children,

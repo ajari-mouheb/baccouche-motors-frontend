@@ -115,7 +115,15 @@ export default function CustomerLoginPage() {
           </Button>
         </form>
       </Form>
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <p className="mt-4 text-center text-sm text-muted-foreground">
+        <Link
+          href="/customer/forgot-password"
+          className="font-medium text-luxury-accent hover:underline"
+        >
+          Mot de passe oublié ?
+        </Link>
+      </p>
+      <p className="mt-2 text-center text-sm text-muted-foreground">
         Pas encore de compte ?{" "}
         <Link
           href="/customer/register"

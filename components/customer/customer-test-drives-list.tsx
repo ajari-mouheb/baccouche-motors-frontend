@@ -1,47 +1,39 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
-import type { MockTestDrive } from "@/lib/data/mock-admin";
+import type { TestDrive } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { TestDriveDetailDialog } from "./test-drive-detail-dialog";
-import { fetchTestDrives, deleteTestDrive } from "@/lib/api/test-drives";
+import { useTestDrives, useCancelTestDrive } from "@/lib/hooks/use-test-drives";
 
-const statusVariant = {
-  pending: "pending" as const,
-  confirmed: "confirmed" as const,
-  completed: "completed" as const,
-  rejected: "rejected" as const,
+const statusVariant: Record<string, "pending" | "confirmed" | "completed" | "rejected" | "destructive"> = {
+  pending: "pending",
+  confirmed: "confirmed",
+  completed: "completed",
+  rejected: "rejected",
+  cancelled: "destructive",
 };
 
-const statusLabel = {
+const statusLabel: Record<string, string> = {
   pending: "En attente",
   confirmed: "Confirmé",
   completed: "Terminé",
   rejected: "Refusé",
+  cancelled: "Annulé",
 };
 
-interface CustomerTestDrivesListProps {
-  testDrives: MockTestDrive[];
-}
+export function CustomerTestDrivesList() {
+  const { data: testDrives = [], isLoading } = useTestDrives();
+  const cancelTestDrive = useCancelTestDrive();
 
-export function CustomerTestDrivesList({ testDrives: initialTestDrives }: CustomerTestDrivesListProps) {
-  const [testDrives, setTestDrives] = useState<MockTestDrive[]>(initialTestDrives);
-  const [isLoading, setIsLoading] = useState(true);
-  const [selected, setSelected] = useState<MockTestDrive | null>(null);
+  const [selected, setSelected] = useState<TestDrive | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cancelConfirmId, setCancelConfirmId] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchTestDrives().then((data) => {
-      setTestDrives(data);
-      setIsLoading(false);
-    });
-  }, []);
 
   function handleCancelRequest(id: string) {
     setCancelConfirmId(id);
@@ -51,9 +43,8 @@ export function CustomerTestDrivesList({ testDrives: initialTestDrives }: Custom
   async function confirmCancel() {
     if (!cancelConfirmId) return;
     try {
-      const ok = await deleteTestDrive(cancelConfirmId);
+      const ok = await cancelTestDrive.mutateAsync(cancelConfirmId);
       if (ok) {
-        setTestDrives((prev) => prev.filter((t) => t.id !== cancelConfirmId));
         setSelected((prev) => (prev?.id === cancelConfirmId ? null : prev));
         toast.success("Demande annulée");
       } else {
@@ -65,7 +56,7 @@ export function CustomerTestDrivesList({ testDrives: initialTestDrives }: Custom
     setCancelConfirmId(null);
   }
 
-  function openDetail(td: MockTestDrive) {
+  function openDetail(td: TestDrive) {
     setSelected(td);
     setDialogOpen(true);
   }

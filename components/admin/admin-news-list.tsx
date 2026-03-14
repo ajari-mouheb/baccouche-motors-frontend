@@ -1,35 +1,32 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { toast } from "sonner";
-import type { NewsArticle } from "@/lib/data/news";
+import type { NewsArticle } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { NewsFormDialog } from "./news-form-dialog";
-import { fetchNews, createNews, updateNews, deleteNews } from "@/lib/api/news";
+import {
+  useNews,
+  useCreateNews,
+  useUpdateNews,
+  useDeleteNews,
+} from "@/lib/hooks/use-news";
 
-interface AdminNewsListProps {
-  articles: NewsArticle[];
-}
+export function AdminNewsList() {
+  const { data: articles = [], isLoading } = useNews();
+  const createNews = useCreateNews();
+  const updateNews = useUpdateNews();
+  const deleteNews = useDeleteNews();
 
-export function AdminNewsList({ articles: initialArticles }: AdminNewsListProps) {
-  const [articles, setArticles] = useState<NewsArticle[]>(initialArticles);
-  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [deleteSlug, setDeleteSlug] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editingArticle, setEditingArticle] = useState<NewsArticle | null>(null);
-
-  useEffect(() => {
-    fetchNews().then((data) => {
-      setArticles(data);
-      setIsLoading(false);
-    });
-  }, []);
 
   const filtered = articles.filter(
     (a) =>
@@ -56,48 +53,50 @@ export function AdminNewsList({ articles: initialArticles }: AdminNewsListProps)
     image?: string;
   }) {
     try {
-      if (editingArticle) {
-        const updated = await updateNews(editingArticle.slug, {
-          title: data.title,
-          excerpt: data.excerpt,
-          content: data.content,
-          date: data.date,
-          image: data.image || undefined,
+      if (editingArticle && editingArticle.id) {
+        const updated = await updateNews.mutateAsync({
+          id: editingArticle.id,
+          data: {
+            title: data.title,
+            excerpt: data.excerpt,
+            content: data.content,
+            date: data.date,
+            image: data.image || undefined,
+            slug: data.slug,
+          },
         });
         if (updated) {
-          setArticles((prev) =>
-            prev.map((a) => (a.slug === editingArticle.slug ? updated : a))
-          );
           toast.success("Article modifié");
+          setFormOpen(false);
         } else {
           toast.error("Erreur lors de la modification");
         }
       } else {
-        const created = await createNews({
+        await createNews.mutateAsync({
           title: data.title,
           excerpt: data.excerpt,
           content: data.content,
           date: data.date,
           image: data.image || undefined,
+          slug: data.slug,
         });
-        setArticles((prev) => [...prev, created]);
         toast.success("Article ajouté");
+        setFormOpen(false);
       }
     } catch {
       toast.error("Une erreur est survenue");
     }
   }
 
-  function handleDeleteClick(slug: string) {
-    setDeleteSlug(slug);
+  function handleDeleteClick(id: string) {
+    setDeleteId(id);
   }
 
   async function confirmDelete() {
-    if (!deleteSlug) return;
+    if (!deleteId) return;
     try {
-      const ok = await deleteNews(deleteSlug);
+      const ok = await deleteNews.mutateAsync(deleteId);
       if (ok) {
-        setArticles((prev) => prev.filter((a) => a.slug !== deleteSlug));
         toast.success("Article supprimé");
       } else {
         toast.error("Erreur lors de la suppression");
@@ -105,7 +104,7 @@ export function AdminNewsList({ articles: initialArticles }: AdminNewsListProps)
     } catch {
       toast.error("Une erreur est survenue");
     }
-    setDeleteSlug(null);
+    setDeleteId(null);
   }
 
   if (isLoading) {
@@ -170,15 +169,17 @@ export function AdminNewsList({ articles: initialArticles }: AdminNewsListProps)
                 <Pencil className="size-4" />
                 Modifier
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-destructive hover:text-destructive"
-                onClick={() => handleDeleteClick(article.slug)}
-              >
-                <Trash2 className="size-4" />
-                Supprimer
-              </Button>
+              {article.id && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-destructive hover:text-destructive"
+                  onClick={() => handleDeleteClick(article.id!)}
+                >
+                  <Trash2 className="size-4" />
+                  Supprimer
+                </Button>
+              )}
             </div>
           </div>
         ))}
@@ -197,8 +198,8 @@ export function AdminNewsList({ articles: initialArticles }: AdminNewsListProps)
       />
 
       <ConfirmDialog
-        open={!!deleteSlug}
-        onOpenChange={(open) => !open && setDeleteSlug(null)}
+        open={!!deleteId}
+        onOpenChange={(open) => !open && setDeleteId(null)}
         title="Supprimer l'article"
         description="Cette action est irréversible. L'article sera définitivement supprimé."
         confirmLabel="Supprimer"

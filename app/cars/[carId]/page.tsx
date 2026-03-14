@@ -2,22 +2,18 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { getCarBySlug, getAllCarSlugs } from "@/lib/data/cars";
+import * as carsApi from "@/lib/api/cars-api";
 import { Button } from "@/components/ui/button";
 
 interface CarPageProps {
   params: Promise<{ carId: string }>;
 }
 
-export async function generateStaticParams() {
-  return getAllCarSlugs().map((slug) => ({ carId: slug }));
-}
-
 export async function generateMetadata({
   params,
 }: CarPageProps): Promise<Metadata> {
   const { carId } = await params;
-  const car = getCarBySlug(carId);
+  const car = await carsApi.getBySlug(carId);
   if (!car) return {};
   return {
     title: `${car.name} | Baccouche Automobiles - BMW Sousse`,
@@ -27,7 +23,7 @@ export async function generateMetadata({
 
 export default async function CarDetailPage({ params }: CarPageProps) {
   const { carId } = await params;
-  const car = getCarBySlug(carId);
+  const car = await carsApi.getBySlug(carId);
   if (!car) notFound();
 
   return (

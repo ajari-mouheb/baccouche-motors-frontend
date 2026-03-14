@@ -76,7 +76,7 @@ export default function AdminLoginPage() {
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="admin@baccouche.com"
+                    placeholder="admin@baccouche-motors.com"
                     {...field}
                   />
                 </FormControl>
@@ -115,7 +115,7 @@ export default function AdminLoginPage() {
         </form>
       </Form>
       <p className="mt-6 text-center text-xs text-muted-foreground/80">
-        Démo : admin@baccouche.com / admin
+        Démo : admin@baccouche-motors.com / Admin123!
       </p>
     </AuthPageLayout>
   );
