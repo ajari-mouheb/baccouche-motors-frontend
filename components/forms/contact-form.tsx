@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useCreateContact } from "@/lib/hooks/use-contacts";
+import { formatPhoneNumber, isValidTunisianPhone } from "@/lib/utils/phone-formatting";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,7 +22,10 @@ import { Textarea } from "@/components/ui/textarea";
 const contactSchema = z.object({
   name: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
   email: z.string().email("Email invalide"),
-  phone: z.string().optional(),
+  phone: z.string().optional().refine(
+    (val) => !val || isValidTunisianPhone(val),
+    "Numéro de téléphone tunisien invalide (ex: +216 20 123 456)"
+  ),
   subject: z.string().min(2, "Veuillez indiquer un sujet"),
   message: z.string().min(10, "Le message doit contenir au moins 10 caractères"),
 });
@@ -109,7 +113,14 @@ export function ContactForm() {
             <FormItem>
               <FormLabel>Téléphone (optionnel)</FormLabel>
               <FormControl>
-                <Input placeholder="+216 XX XXX XXX" {...field} />
+                <Input 
+                  placeholder="+216 XX XXX XXX" 
+                  {...field}
+                  onChange={(e) => {
+                    const formatted = formatPhoneNumber(e.target.value);
+                    field.onChange(formatted);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

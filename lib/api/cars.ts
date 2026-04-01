@@ -1,7 +1,7 @@
 import type { Car } from "@/lib/data/cars";
 import { cars as initialCars } from "@/lib/data/cars";
 
-let carsData: Car[] = [...initialCars];
+const carsData: Car[] = [...initialCars];
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

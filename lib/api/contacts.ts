@@ -1,7 +1,7 @@
 import type { MockContact } from "@/lib/data/mock-admin";
 import { mockContacts as initialContacts } from "@/lib/data/mock-admin";
 
-let contactsData: MockContact[] = initialContacts.map((c) => ({ ...c }));
+const contactsData: MockContact[] = initialContacts.map((c) => ({ ...c }));
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

@@ -3,7 +3,6 @@
 import { CarGrid } from "@/components/cars/car-grid";
 import { EmptyState } from "@/components/shared/empty-state";
 import { useCars } from "@/lib/hooks/use-cars";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export default function CarsPage() {

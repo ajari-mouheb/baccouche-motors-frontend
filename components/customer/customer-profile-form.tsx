@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { User, Lock } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { useUpdateMe, useChangePassword } from "@/lib/hooks/use-customers";
+import { formatPhoneNumber, isValidTunisianPhone } from "@/lib/utils/phone-formatting";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,7 +22,10 @@ import {
 
 const profileSchema = z.object({
   name: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
-  phone: z.string().optional(),
+  phone: z.string().optional().refine(
+    (val) => !val || isValidTunisianPhone(val),
+    "Numéro de téléphone tunisien invalide"
+  ),
   address: z.string().optional(),
 });
 
@@ -161,7 +165,14 @@ export function CustomerProfileForm() {
                 <FormItem>
                   <FormLabel>Téléphone</FormLabel>
                   <FormControl>
-                    <Input placeholder="+216 XX XXX XXX" {...field} />
+                    <Input 
+                      placeholder="+216 XX XXX XXX" 
+                      {...field}
+                      onChange={(e) => {
+                        const formatted = formatPhoneNumber(e.target.value);
+                        field.onChange(formatted);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

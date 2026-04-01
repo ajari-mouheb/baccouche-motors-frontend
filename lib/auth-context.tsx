@@ -25,7 +25,10 @@ export interface AuthUser {
 interface AuthContextValue {
   user: AuthUser | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  login: (
+    email: string,
+    password: string
+  ) => Promise<{ success: boolean; error?: string; user?: AuthUser }>;
   logout: () => void;
   updateUser: (updates: Partial<AuthUser>) => void;
   register: (data: {
@@ -63,11 +66,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(
-    async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    async (
+      email: string,
+      password: string
+    ): Promise<{ success: boolean; error?: string; user?: AuthUser }> => {
       const result = await authApi.login(email, password);
       if (result.success && result.user) {
         setUser(result.user);
-        return { success: true };
+        return { success: true, user: result.user };
       }
       return { success: false, error: result.error ?? "Échec de connexion" };
     },

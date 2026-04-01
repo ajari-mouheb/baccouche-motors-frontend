@@ -8,8 +8,7 @@ export const metadata: Metadata = {
 
 export default function AdminTestDrivesPage() {
   return (
-    <div className="p-6 md:p-8">
-      <h1 className="section-title mb-8">Demandes Test Drive</h1>
+    <div className="p-4 md:p-6 lg:p-8">
       <TestDrivesTable />
     </div>
   );

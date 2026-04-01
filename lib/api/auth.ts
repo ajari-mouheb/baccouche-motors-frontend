@@ -3,7 +3,7 @@ import type { AuthUser } from "@/lib/auth-context";
 // Mock profile stored in memory (reset on refresh)
 let customerProfile: Partial<AuthUser> = {};
 
-export async function fetchProfile(userId: string): Promise<Partial<AuthUser> | null> {
+export async function fetchProfile(_userId: string): Promise<Partial<AuthUser> | null> {
   await new Promise((r) => setTimeout(r, 200));
   return { ...customerProfile };
 }

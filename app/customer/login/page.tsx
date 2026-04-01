@@ -28,11 +28,18 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
+function getSafeRedirect(target: string | null, fallback: string): string {
+  if (!target || !target.startsWith("/") || target.startsWith("//")) {
+    return fallback;
+  }
+  return target;
+}
+
 export default function CustomerLoginPage() {
   const { login, logout } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") ?? "/customer/dashboard";
+  const redirect = getSafeRedirect(searchParams.get("redirect"), "/customer/dashboard");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormValues>({
@@ -46,7 +53,11 @@ export default function CustomerLoginPage() {
     setIsSubmitting(false);
 
     if (result.success) {
-      const user = JSON.parse(sessionStorage.getItem("baccouche-auth") ?? "{}");
+      const user = result.user;
+      if (!user) {
+        toast.error("Impossible de récupérer le profil utilisateur");
+        return;
+      }
       if (user.role !== "customer") {
         logout();
         toast.error("Accès réservé aux clients");

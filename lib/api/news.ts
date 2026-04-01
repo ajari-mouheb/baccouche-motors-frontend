@@ -1,7 +1,7 @@
 import type { NewsArticle } from "@/lib/data/news";
 import { newsArticles as initialNews } from "@/lib/data/news";
 
-let newsData: NewsArticle[] = [...initialNews];
+const newsData: NewsArticle[] = [...initialNews];
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

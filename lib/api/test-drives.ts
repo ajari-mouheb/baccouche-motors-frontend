@@ -1,7 +1,7 @@
 import type { MockTestDrive } from "@/lib/data/mock-admin";
 import { mockTestDrives as initialTestDrives } from "@/lib/data/mock-admin";
 
-let testDrivesData: MockTestDrive[] = initialTestDrives.map((t) => ({ ...t }));
+const testDrivesData: MockTestDrive[] = initialTestDrives.map((t) => ({ ...t }));
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

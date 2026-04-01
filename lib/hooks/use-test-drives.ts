@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as testDrivesApi from "@/lib/api/test-drives-api";
 import type {
-  TestDrive,
   TestDriveCreateGuest,
   TestDriveCreateLoggedIn,
   TestDriveStatus,

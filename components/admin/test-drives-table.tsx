@@ -79,6 +79,7 @@ export function TestDrivesTable() {
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
 
+  // Reset to page 1 when filtered data changes and current page is out of bounds
   useEffect(() => {
     if (page > totalPages && totalPages > 0) setPage(1);
   }, [page, totalPages]);

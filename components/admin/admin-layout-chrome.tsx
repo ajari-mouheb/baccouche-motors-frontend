@@ -19,11 +19,13 @@ export function AdminLayoutChrome({
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-8rem)]">
+    <div className="flex min-h-screen bg-background">
       <AdminSidebar />
-      <div className="flex flex-1 flex-col overflow-auto pl-16 lg:pl-0">
+      <div className="flex flex-1 flex-col overflow-hidden lg:ml-0 ml-0">
         <AdminHeader />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 overflow-y-auto bg-gradient-to-br from-background via-background to-muted/20">
+          {children}
+        </main>
       </div>
     </div>
   );

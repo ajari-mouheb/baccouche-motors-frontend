@@ -59,25 +59,22 @@ export function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "relative text-sm font-medium tracking-wide transition-colors pb-1",
-                  isHome
-                    ? "text-white/90 hover:text-white after:bg-luxury-accent"
-                    : "text-muted-foreground hover:text-foreground after:bg-luxury-accent",
-                  (isHome ? "hover:text-white" : "hover:text-foreground"),
-                  "after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:transition-all after:duration-200 hover:after:w-full"
-                )}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                "relative text-sm font-medium tracking-wide transition-colors pb-1",
+                isHome
+                  ? "text-white/90 hover:text-white after:bg-luxury-accent"
+                  : "text-muted-foreground hover:text-foreground after:bg-luxury-accent",
+                (isHome ? "hover:text-white" : "hover:text-foreground"),
+                "after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:transition-all after:duration-200 hover:after:w-full"
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center gap-2">
