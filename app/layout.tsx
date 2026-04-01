@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Source_Sans_3 } from "next/font/google";
+import { Cormorant_Garamond, Source_Sans_3, Geist } from "next/font/google";
 import "./globals.css";
 import { SiteChrome } from "@/components/layout/site-chrome";
 import { Providers } from "@/components/providers";
+import { cn } from "@/lib/utils";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-serif",
@@ -11,12 +12,7 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-const sourceSans = Source_Sans_3({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: {
@@ -42,9 +38,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className="dark">
+    <html lang="fr" className={cn("dark", "font-sans", geist.variable)}>
       <body
-        className={`${cormorant.variable} ${sourceSans.variable} antialiased min-h-screen flex flex-col font-sans`}
+        className={`${cormorant.variable} ${geist.variable} antialiased min-h-screen flex flex-col font-sans`}
       >
         <Providers>
           <SiteChrome>{children}</SiteChrome>
