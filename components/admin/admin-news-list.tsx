@@ -3,30 +3,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, FileText, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import type { NewsArticle } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
-import { NewsFormDialog } from "./news-form-dialog";
-import {
-  useNews,
-  useCreateNews,
-  useUpdateNews,
-  useDeleteNews,
-} from "@/lib/hooks/use-news";
+import { useDeleteNews, useNews } from "@/lib/hooks/use-news";
 
 export function AdminNewsList() {
   const { data: articles = [], isLoading } = useNews();
-  const createNews = useCreateNews();
-  const updateNews = useUpdateNews();
   const deleteNews = useDeleteNews();
 
   const [search, setSearch] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [formOpen, setFormOpen] = useState(false);
-  const [editingArticle, setEditingArticle] = useState<NewsArticle | null>(null);
+  const [deleteTitle, setDeleteTitle] = useState<string>("");
 
   const filtered = articles.filter(
     (a) =>
@@ -34,62 +25,11 @@ export function AdminNewsList() {
       a.excerpt.toLowerCase().includes(search.toLowerCase().trim())
   );
 
-  function handleAdd() {
-    setEditingArticle(null);
-    setFormOpen(true);
-  }
-
-  function handleEdit(article: NewsArticle) {
-    setEditingArticle(article);
-    setFormOpen(true);
-  }
-
-  async function handleSave(data: {
-    slug: string;
-    title: string;
-    excerpt: string;
-    content: string;
-    date: string;
-    image?: string;
-  }) {
-    try {
-      if (editingArticle && editingArticle.id) {
-        const updated = await updateNews.mutateAsync({
-          id: editingArticle.id,
-          data: {
-            title: data.title,
-            excerpt: data.excerpt,
-            content: data.content,
-            date: data.date,
-            image: data.image || undefined,
-            slug: data.slug,
-          },
-        });
-        if (updated) {
-          toast.success("Article modifié");
-          setFormOpen(false);
-        } else {
-          toast.error("Erreur lors de la modification");
-        }
-      } else {
-        await createNews.mutateAsync({
-          title: data.title,
-          excerpt: data.excerpt,
-          content: data.content,
-          date: data.date,
-          image: data.image || undefined,
-          slug: data.slug,
-        });
-        toast.success("Article ajouté");
-        setFormOpen(false);
-      }
-    } catch {
-      toast.error("Une erreur est survenue");
+  function handleDeleteClick(article: NewsArticle) {
+    if (article.id) {
+      setDeleteId(article.id);
+      setDeleteTitle(article.title);
     }
-  }
-
-  function handleDeleteClick(id: string) {
-    setDeleteId(id);
   }
 
   async function confirmDelete() {
@@ -105,18 +45,23 @@ export function AdminNewsList() {
       toast.error("Une erreur est survenue");
     }
     setDeleteId(null);
+    setDeleteTitle("");
   }
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[200px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-luxury-accent border-t-transparent" />
+      <div className="flex min-h-[300px] items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-luxury-accent border-t-transparent" />
+          <p className="text-sm text-muted-foreground">Chargement...</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
+      {/* Header with Search and Add Button */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-xs">
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -127,81 +72,108 @@ export function AdminNewsList() {
             className="pl-9"
           />
         </div>
-        <Button onClick={handleAdd} className="shrink-0">
-          <Plus className="size-4" />
-          Nouvel article
-        </Button>
+        <Link href="/admin/news/new">
+          <Button className="shrink-0 gap-2">
+            <Plus className="size-4" />
+            Nouvel article
+          </Button>
+        </Link>
       </div>
-      <div className="space-y-6">
-        {filtered.map((article) => (
-          <div
-            key={article.slug}
-            className="flex flex-col gap-4 overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:shadow-md sm:flex-row"
-          >
-            <Link
-              href={`/actualites/${article.slug}`}
-              className="flex flex-1 gap-6"
+
+      {/* Articles List */}
+      {filtered.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+          <FileText className="mb-2 size-12 text-muted-foreground/50" />
+          <p className="text-lg font-medium">Aucun article trouvé.</p>
+          <p className="text-sm">Créez un article pour commencer.</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filtered.map((article) => (
+            <div
+              key={article.slug}
+              className="group overflow-hidden rounded-xl border border-border/50 bg-card shadow-sm transition-all hover:border-border hover:shadow-md"
             >
-              {article.image && (
-                <div className="relative h-24 w-full shrink-0 overflow-hidden bg-muted sm:h-32 sm:w-48">
-                  <Image
-                    src={article.image}
-                    alt={article.title}
-                    fill
-                    className="object-cover"
-                    sizes="192px"
-                  />
+              <div className="flex flex-col gap-0 sm:flex-row">
+                {/* Image */}
+                {article.image && (
+                  <Link
+                    href={`/actualites/${article.slug}`}
+                    className="block w-full shrink-0 sm:w-48"
+                  >
+                    <div className="relative aspect-video overflow-hidden sm:aspect-[4/3] sm:h-full">
+                      <Image
+                        src={article.image}
+                        alt={article.title}
+                        fill
+                        className="object-cover transition-transform group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, 192px"
+                      />
+                    </div>
+                  </Link>
+                )}
+
+                {/* Content */}
+                <div className="flex flex-1 flex-col justify-between p-4">
+                  <div>
+                    <Link
+                      href={`/actualites/${article.slug}`}
+                      className="block"
+                    >
+                      <h3 className="font-semibold text-foreground line-clamp-1 hover:text-luxury-accent transition-colors">
+                        {article.title}
+                      </h3>
+                    </Link>
+                    <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                      {article.excerpt}
+                    </p>
+                    <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Calendar className="size-3" />
+                      {new Date(article.date).toLocaleDateString("fr-FR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </p>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="mt-4 flex gap-2">
+                    <Link href={`/admin/news/edit/${article.id}`} className="flex-1 sm:flex-none">
+                      <Button variant="outline" size="sm" className="w-full gap-1.5">
+                        <Pencil className="size-4" />
+                        Modifier
+                      </Button>
+                    </Link>
+                    {article.id && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10"
+                        onClick={() => handleDeleteClick(article)}
+                      >
+                        <Trash2 className="size-4" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
-              )}
-              <div className="flex flex-1 flex-col justify-center p-4">
-                <h3 className="font-semibold line-clamp-1">{article.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {new Date(article.date).toLocaleDateString("fr-FR")}
-                </p>
               </div>
-            </Link>
-            <div className="flex gap-2 border-t border-border p-4 sm:border-t-0 sm:border-l sm:p-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleEdit(article)}
-              >
-                <Pencil className="size-4" />
-                Modifier
-              </Button>
-              {article.id && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-destructive hover:text-destructive"
-                  onClick={() => handleDeleteClick(article.id!)}
-                >
-                  <Trash2 className="size-4" />
-                  Supprimer
-                </Button>
-              )}
             </div>
-          </div>
-        ))}
-      </div>
-      {filtered.length === 0 && (
-        <p className="py-12 text-center text-muted-foreground">
-          Aucun article trouvé.
-        </p>
+          ))}
+        </div>
       )}
 
-      <NewsFormDialog
-        open={formOpen}
-        onOpenChange={setFormOpen}
-        article={editingArticle}
-        onSave={handleSave}
-      />
-
+      {/* Delete Confirmation Dialog */}
       <ConfirmDialog
         open={!!deleteId}
-        onOpenChange={(open) => !open && setDeleteId(null)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setDeleteId(null);
+            setDeleteTitle("");
+          }
+        }}
         title="Supprimer l'article"
-        description="Cette action est irréversible. L'article sera définitivement supprimé."
+        description={`Êtes-vous sûr de vouloir supprimer "${deleteTitle}" ? Cette action est irréversible.`}
         confirmLabel="Supprimer"
         variant="destructive"
         onConfirm={confirmDelete}

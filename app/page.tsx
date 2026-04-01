@@ -5,6 +5,7 @@ import { VehicleCtaSection } from "@/components/home/vehicle-cta-section";
 import { TestDriveCtaSection } from "@/components/home/test-drive-cta-section";
 import { ShowroomSection } from "@/components/home/showroom-section";
 import { NewsSection } from "@/components/home/news-section";
+import { NewsletterSection } from "@/components/home/newsletter-section";
 import { ContactSection } from "@/components/home/contact-section";
 
 export default function HomePage() {
@@ -17,6 +18,7 @@ export default function HomePage() {
       <TestDriveCtaSection />
       <ShowroomSection />
       <NewsSection />
+      <NewsletterSection />
       <ContactSection />
     </>
   );

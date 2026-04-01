@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { Search, Check, X, CheckCircle, Eye } from "lucide-react";
+import { Search, Check, X, CheckCircle, Eye, Clock, Car, CalendarDays } from "lucide-react";
 import { toast } from "sonner";
 import type { TestDrive } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Pagination } from "@/components/ui/pagination";
 import {
@@ -23,6 +24,7 @@ import {
   useUpdateTestDriveStatus,
 } from "@/lib/hooks/use-test-drives";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const statusVariant: Record<string, "pending" | "confirmed" | "completed" | "rejected" | "destructive"> = {
   pending: "pending",
@@ -40,7 +42,16 @@ const statusLabel: Record<string, string> = {
   cancelled: "Annulé",
 };
 
+const statusIcon: Record<string, typeof Clock> = {
+  pending: Clock,
+  confirmed: CheckCircle,
+  completed: CheckCircle,
+  rejected: X,
+  cancelled: X,
+};
+
 type StatusFilter = "all" | "pending" | "confirmed" | "completed" | "rejected" | "cancelled";
+type BulkAction = "confirm" | "reject" | "complete" | null;
 
 const PAGE_SIZE = 5;
 
@@ -54,6 +65,11 @@ export function TestDrivesTable() {
   const [detailTestDrive, setDetailTestDrive] = useState<TestDrive | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [rejectConfirmId, setRejectConfirmId] = useState<string | null>(null);
+
+  // Bulk selection state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkAction, setBulkAction] = useState<BulkAction>(null);
+  const [isProcessingBulk, setIsProcessingBulk] = useState(false);
 
   const filtered = useMemo(() => {
     let result = testDrives;
@@ -79,10 +95,54 @@ export function TestDrivesTable() {
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
 
-  // Reset to page 1 when filtered data changes and current page is out of bounds
+  // Get selectable items (only pending can be bulk confirmed/rejected)
+  const selectableItems = useMemo(() => {
+    return filtered.filter((td) => td.status === "pending");
+  }, [filtered]);
+
+  const allSelectableSelected = selectableItems.length > 0 && selectableItems.every((td) => selectedIds.has(td.id));
+  const someSelected = selectedIds.size > 0;
+  const selectedPending = Array.from(selectedIds).filter((id) => {
+    const td = testDrives.find((t) => t.id === id);
+    return td?.status === "pending";
+  });
+  const selectedConfirmed = Array.from(selectedIds).filter((id) => {
+    const td = testDrives.find((t) => t.id === id);
+    return td?.status === "confirmed";
+  });
+
   useEffect(() => {
     if (page > totalPages && totalPages > 0) setPage(1);
   }, [page, totalPages]);
+
+  // Clear selection when filters change
+  useEffect(() => {
+    setSelectedIds(new Set());
+  }, [search, statusFilter]);
+
+  function toggleSelect(id: string) {
+    const newSet = new Set(selectedIds);
+    if (newSet.has(id)) {
+      newSet.delete(id);
+    } else {
+      newSet.add(id);
+    }
+    setSelectedIds(newSet);
+  }
+
+  function toggleSelectAll() {
+    if (allSelectableSelected) {
+      setSelectedIds(new Set());
+    } else {
+      const newSet = new Set(selectedIds);
+      selectableItems.forEach((td) => newSet.add(td.id));
+      setSelectedIds(newSet);
+    }
+  }
+
+  function clearSelection() {
+    setSelectedIds(new Set());
+  }
 
   async function handleConfirm(id: string) {
     try {
@@ -137,10 +197,45 @@ export function TestDrivesTable() {
     }
   }
 
+  async function executeBulkAction() {
+    if (!bulkAction) return;
+
+    setIsProcessingBulk(true);
+    let successCount = 0;
+    let errorCount = 0;
+
+    const targetStatus = bulkAction === "confirm" ? "confirmed" : bulkAction === "reject" ? "rejected" : "completed";
+    const targetIds = bulkAction === "complete" ? selectedConfirmed : selectedPending;
+
+    for (const id of targetIds) {
+      try {
+        await updateStatus.mutateAsync({ id, status: targetStatus });
+        successCount++;
+      } catch {
+        errorCount++;
+      }
+    }
+
+    setIsProcessingBulk(false);
+    setBulkAction(null);
+    setSelectedIds(new Set());
+
+    if (successCount > 0) {
+      const actionLabel = bulkAction === "confirm" ? "confirmées" : bulkAction === "reject" ? "refusées" : "terminées";
+      toast.success(`${successCount} demande(s) ${actionLabel}`);
+    }
+    if (errorCount > 0) {
+      toast.error(`${errorCount} demande(s) en erreur`);
+    }
+  }
+
   if (isLoading) {
     return (
-      <div className="flex min-h-[200px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-luxury-accent border-t-transparent" />
+      <div className="flex min-h-[300px] items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-luxury-accent border-t-transparent" />
+          <p className="text-sm text-muted-foreground">Chargement...</p>
+        </div>
       </div>
     );
   }
@@ -161,7 +256,8 @@ export function TestDrivesTable() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      {/* Filters */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -188,105 +284,253 @@ export function TestDrivesTable() {
           </SelectContent>
         </Select>
       </div>
-      <div className="overflow-hidden rounded-lg border border-border">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-border bg-muted/50">
-              <th className="px-4 py-3 text-left font-medium">Nom</th>
-              <th className="px-4 py-3 text-left font-medium">Email</th>
-              <th className="px-4 py-3 text-left font-medium">Téléphone</th>
-              <th className="px-4 py-3 text-left font-medium">Modèle</th>
-              <th className="px-4 py-3 text-left font-medium">Date souhaitée</th>
-              <th className="px-4 py-3 text-left font-medium">Statut</th>
-              <th className="px-4 py-3 text-right font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginated.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={7}
-                  className="px-4 py-12 text-center text-muted-foreground"
+
+      {/* Bulk Actions Bar */}
+      {someSelected && (
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-luxury-accent/30 bg-luxury-accent/5 p-3">
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium">
+              {selectedIds.size} sélectionnée(s)
+            </span>
+            <Button variant="ghost" size="sm" onClick={clearSelection}>
+              Effacer
+            </Button>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {selectedPending.length > 0 && (
+              <>
+                <Button
+                  size="sm"
+                  className="gap-2 bg-emerald-600 hover:bg-emerald-700"
+                  onClick={() => setBulkAction("confirm")}
+                  disabled={isProcessingBulk}
                 >
-                  Aucun résultat pour cette recherche.
-                </td>
+                  <Check className="size-4" />
+                  Confirmer ({selectedPending.length})
+                </Button>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  className="gap-2"
+                  onClick={() => setBulkAction("reject")}
+                  disabled={isProcessingBulk}
+                >
+                  <X className="size-4" />
+                  Refuser ({selectedPending.length})
+                </Button>
+              </>
+            )}
+            {selectedConfirmed.length > 0 && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="gap-2"
+                onClick={() => setBulkAction("complete")}
+                disabled={isProcessingBulk}
+              >
+                <CheckCircle className="size-4" />
+                Terminer ({selectedConfirmed.length})
+              </Button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Table */}
+      <div className="overflow-hidden rounded-xl border border-border/50 bg-card/50">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-border/50 bg-muted/30">
+                <th className="px-4 py-3 text-left">
+                  <button
+                    onClick={toggleSelectAll}
+                    className={cn(
+                      "flex h-5 w-5 items-center justify-center rounded border transition-colors",
+                      allSelectableSelected
+                        ? "bg-luxury-accent border-luxury-accent"
+                        : "border-border hover:border-luxury-accent"
+                    )}
+                    aria-label="Sélectionner tout"
+                  >
+                    {allSelectableSelected && (
+                      <Check className="size-3 text-primary" />
+                    )}
+                  </button>
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Client
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Modèle
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Contact
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Date souhaitée
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Statut
+                </th>
+                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Actions
+                </th>
               </tr>
-            ) : (
-              paginated.map((td) => (
-                <tr key={td.id} className="border-b border-border/50">
-                  <td className="px-4 py-3 font-medium">{td.name}</td>
-                  <td className="px-4 py-3">{td.email}</td>
-                  <td className="px-4 py-3">{td.phone}</td>
-                  <td className="px-4 py-3">{td.model}</td>
-                  <td className="px-4 py-3">
-                    {td.preferredDate
-                      ? new Date(td.preferredDate).toLocaleDateString("fr-FR")
-                      : "—"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <Badge variant={statusVariant[td.status]}>
-                      {statusLabel[td.status]}
-                    </Badge>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-8"
-                        onClick={() => {
-                          setDetailTestDrive(td);
-                          setDetailOpen(true);
-                        }}
-                        aria-label="Voir les détails"
-                      >
-                        <Eye className="size-4" />
-                      </Button>
-                      {td.status === "pending" && (
-                        <>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="size-8"
-                            onClick={() => handleConfirm(td.id)}
-                            aria-label="Confirmer"
-                          >
-                            <Check className="size-4" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="size-8 text-destructive hover:text-destructive"
-                            onClick={() => handleReject(td.id)}
-                            aria-label="Refuser"
-                          >
-                            <X className="size-4" />
-                          </Button>
-                        </>
-                      )}
-                      {td.status === "confirmed" && (
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="size-8"
-                          onClick={() => handleComplete(td.id)}
-                          aria-label="Marquer terminé"
-                        >
-                          <CheckCircle className="size-4" />
-                        </Button>
-                      )}
-                      {(td.status === "completed" ||
-                        td.status === "rejected") && (
-                        <span className="text-xs text-muted-foreground">—</span>
-                      )}
+            </thead>
+            <tbody className="divide-y divide-border/50">
+              {paginated.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={7}
+                    className="px-4 py-12 text-center text-muted-foreground"
+                  >
+                    <div className="flex flex-col items-center gap-2">
+                      <Search className="size-8 text-muted-foreground/50" />
+                      <p>Aucun résultat pour cette recherche.</p>
                     </div>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                paginated.map((td) => {
+                  const StatusIcon = statusIcon[td.status] || Clock;
+                  const isSelected = selectedIds.has(td.id);
+                  const isSelectable = td.status === "pending";
+
+                  return (
+                    <tr
+                      key={td.id}
+                      className={cn(
+                        "transition-colors hover:bg-muted/30",
+                        isSelected && "bg-luxury-accent/5"
+                      )}
+                    >
+                      <td className="px-4 py-4">
+                        <button
+                          onClick={() => isSelectable && toggleSelect(td.id)}
+                          disabled={!isSelectable}
+                          className={cn(
+                            "flex h-5 w-5 items-center justify-center rounded border transition-colors",
+                            isSelected
+                              ? "bg-luxury-accent border-luxury-accent"
+                              : isSelectable
+                              ? "border-border hover:border-luxury-accent cursor-pointer"
+                              : "border-border/50 opacity-50 cursor-not-allowed"
+                          )}
+                          aria-label="Sélectionner"
+                        >
+                          {isSelected && <Check className="size-3 text-primary" />}
+                        </button>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-medium">
+                            {td.name.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">{td.name}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-2">
+                          <Car className="size-4 text-muted-foreground" />
+                          <span className="font-medium">{td.model}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex flex-col gap-0.5">
+                          <a
+                            href={`mailto:${td.email}`}
+                            className="text-sm text-luxury-accent hover:underline"
+                          >
+                            {td.email}
+                          </a>
+                          {td.phone && (
+                            <a
+                              href={`tel:${td.phone}`}
+                              className="text-xs text-muted-foreground hover:text-foreground"
+                            >
+                              {td.phone}
+                            </a>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <CalendarDays className="size-4" />
+                          <span>
+                            {td.preferredDate
+                              ? new Date(td.preferredDate).toLocaleDateString("fr-FR")
+                              : "—"}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <Badge variant={statusVariant[td.status]} className="gap-1">
+                          <StatusIcon className="size-3" />
+                          {statusLabel[td.status]}
+                        </Badge>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="size-8"
+                            onClick={() => {
+                              setDetailTestDrive(td);
+                              setDetailOpen(true);
+                            }}
+                            aria-label="Voir les détails"
+                          >
+                            <Eye className="size-4" />
+                          </Button>
+                          {td.status === "pending" && (
+                            <>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="size-8 border-emerald-500/50 text-emerald-500 hover:bg-emerald-500/10 hover:text-emerald-500"
+                                onClick={() => handleConfirm(td.id)}
+                                aria-label="Confirmer"
+                              >
+                                <Check className="size-4" />
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="size-8 border-destructive/50 text-destructive hover:bg-destructive/10"
+                                onClick={() => handleReject(td.id)}
+                                aria-label="Refuser"
+                              >
+                                <X className="size-4" />
+                              </Button>
+                            </>
+                          )}
+                          {td.status === "confirmed" && (
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="size-8 border-blue-500/50 text-blue-500 hover:bg-blue-500/10"
+                              onClick={() => handleComplete(td.id)}
+                              aria-label="Marquer terminé"
+                            >
+                              <CheckCircle className="size-4" />
+                            </Button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      {/* Pagination */}
       {filtered.length > PAGE_SIZE && (
         <Pagination
           page={page}
@@ -296,6 +540,7 @@ export function TestDrivesTable() {
         />
       )}
 
+      {/* Dialogs */}
       <AdminTestDriveDetailDialog
         testDrive={detailTestDrive}
         open={detailOpen}
@@ -313,6 +558,35 @@ export function TestDrivesTable() {
         confirmLabel="Refuser"
         variant="destructive"
         onConfirm={confirmReject}
+      />
+
+      {/* Bulk Action Confirmation */}
+      <ConfirmDialog
+        open={!!bulkAction}
+        onOpenChange={(open) => !open && setBulkAction(null)}
+        title={
+          bulkAction === "confirm"
+            ? "Confirmer les demandes"
+            : bulkAction === "reject"
+            ? "Refuser les demandes"
+            : "Terminer les demandes"
+        }
+        description={
+          bulkAction === "confirm"
+            ? `Êtes-vous sûr de vouloir confirmer ${selectedPending.length} demande(s) ?`
+            : bulkAction === "reject"
+            ? `Êtes-vous sûr de vouloir refuser ${selectedPending.length} demande(s) ?`
+            : `Êtes-vous sûr de vouloir marquer ${selectedConfirmed.length} demande(s) comme terminée(s) ?`
+        }
+        confirmLabel={
+          bulkAction === "confirm"
+            ? "Confirmer"
+            : bulkAction === "reject"
+            ? "Refuser"
+            : "Terminer"
+        }
+        variant={bulkAction === "reject" ? "destructive" : "default"}
+        onConfirm={executeBulkAction}
       />
     </div>
   );

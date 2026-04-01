@@ -12,7 +12,9 @@ const pageLabels: Record<string, string> = {
   "/admin/test-drives": "Test Drives",
   "/admin/contacts": "Messages",
   "/admin/cars": "Véhicules",
+  "/admin/cars/new": "Nouveau véhicule",
   "/admin/news": "Actualités",
+  "/admin/news/new": "Nouvel article",
   "/admin/login": "Connexion",
 };
 
@@ -21,7 +23,9 @@ const pageDescriptions: Record<string, string> = {
   "/admin/test-drives": "Gestion des demandes d'essai",
   "/admin/contacts": "Messages et demandes de contact",
   "/admin/cars": "Gestion du catalogue véhicules",
+  "/admin/cars/new": "Ajouter un nouveau véhicule",
   "/admin/news": "Articles et actualités",
+  "/admin/news/new": "Créer un nouvel article",
 };
 
 export function AdminHeader() {

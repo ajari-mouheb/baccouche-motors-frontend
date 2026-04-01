@@ -5,7 +5,7 @@ import { images } from "@/lib/constants/images";
 
 export function PresentationSection() {
   return (
-    <section className="section-padding">
+    <section id="presentation" className="section-padding">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid gap-16 lg:grid-cols-2 lg:items-center lg:gap-20">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted shadow-xl lg:aspect-auto lg:min-h-[420px]">

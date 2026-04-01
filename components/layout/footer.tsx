@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { NewsletterSignup } from "@/components/shared/newsletter-signup";
 
 const footerLinks = [
   { href: "/", label: "Accueil" },
@@ -100,12 +101,12 @@ export function Footer() {
 
           <div className="space-y-4">
             <h3 className="font-serif text-lg font-semibold tracking-wide">
-              BMW Sousse
+              Newsletter
             </h3>
             <p className="text-sm text-primary-foreground/80 leading-relaxed">
-              Showroom, pièces détachées et service après-vente. Plus de 5000
-              m² dédiés à l&apos;excellence automobile.
+              Recevez nos dernières offres et actualités BMW directement dans votre boîte mail.
             </p>
+            <NewsletterSignup variant="compact" className="mt-4" />
           </div>
         </div>
 

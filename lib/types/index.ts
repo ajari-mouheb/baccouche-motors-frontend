@@ -27,6 +27,7 @@ export interface Car {
   year: number;
   price?: string;
   image: string;
+  images?: string[];
   description: string;
   specs?: Record<string, string>;
 }

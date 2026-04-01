@@ -2,6 +2,7 @@
 
 import { CarGrid } from "@/components/cars/car-grid";
 import { EmptyState } from "@/components/shared/empty-state";
+import { CarGridSkeleton } from "@/components/shared/skeletons";
 import { useCars } from "@/lib/hooks/use-cars";
 import { Button } from "@/components/ui/button";
 
@@ -15,14 +16,7 @@ export default function CarsPage() {
           <div className="mb-4 h-10 w-64 animate-pulse rounded bg-muted" />
           <div className="h-5 w-96 animate-pulse rounded bg-muted" />
         </div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="h-80 animate-pulse rounded-xl border border-border bg-card"
-            />
-          ))}
-        </div>
+        <CarGridSkeleton count={6} />
       </div>
     );
   }
