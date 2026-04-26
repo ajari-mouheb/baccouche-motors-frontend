@@ -54,7 +54,9 @@ export function ShowroomSection() {
             </div>
 
             {/* Decorative border */}
-            <div className="absolute -z-10 left-0 top-0 h-full w-full rounded-2xl border-2 border-luxury-accent/20" />
+<<<<<<< HEAD
+            <div className="absolute -z-10 -left-4 -top-4 h-full w-full rounded-2xl border-2 border-luxury-accent/20" />
+>>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
           </div>
 
           {/* Content Side */}

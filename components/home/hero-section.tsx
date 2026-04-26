@@ -61,8 +61,10 @@ export function HeroSection() {
       </div>
 
       {/* Content */}
-      <div className="container relative z-20 mx-auto px-4 md:px-6 pt-20 lg:pt-24">
-        <div className="mx-auto max-w-3xl text-left lg:max-w-3xl">
+<<<<<<< HEAD
+      <div className="container relative z-20 mx-auto px-4 md:px-6">
+        <div className="mx-auto max-w-2xl text-left md:max-w-xl lg:max-w-2xl">
+>>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
           {/* Trust Badge */}
           <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 backdrop-blur-sm">
             <Shield className="h-4 w-4 text-luxury-accent" />

@@ -56,7 +56,9 @@ export function TestimonialsSection() {
   };
 
   return (
-    <section className="section-padding">
+<<<<<<< HEAD
+    <section className="section-padding overflow-hidden">
+>>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
       <div className="container mx-auto px-4 md:px-6">
         {/* Header */}
         <div className="mx-auto mb-16 max-w-2xl text-center">
@@ -72,7 +74,9 @@ export function TestimonialsSection() {
         </div>
 
         {/* Testimonial Carousel */}
-        <div className="relative overflow-hidden">
+<<<<<<< HEAD
+        <div className="relative">
+>>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
           {/* Cards Container */}
           <div className="relative mx-auto max-w-4xl">
             <div className="overflow-hidden">

@@ -31,7 +31,9 @@ const contactCards = [
 
 export function ContactSection() {
   return (
-    <section className="section-padding bg-gradient-to-br from-luxury-black via-luxury-charcoal to-luxury-black relative">
+<<<<<<< HEAD
+<section className="section-padding bg-gradient-to-br from-luxury-black via-luxury-charcoal to-luxury-black relative overflow-hidden">
+>>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
       {/* Decorative elements */}
       <div className="absolute top-0 right-0 z-0 h-96 w-96 translate-x-1/3 -translate-y-1/3 rounded-full bg-luxury-accent/5 blur-3xl" />
       <div className="absolute bottom-0 left-0 z-0 h-64 w-64 -translate-x-1/3 translate-y-1/3 rounded-full bg-luxury-accent/5 blur-3xl" />

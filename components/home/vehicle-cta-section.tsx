@@ -13,7 +13,9 @@ const features = [
 
 export function VehicleCtaSection() {
   return (
-    <section className="relative">
+<<<<<<< HEAD
+    <section className="relative overflow-hidden">
+>>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <Image

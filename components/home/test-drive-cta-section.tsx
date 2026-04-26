@@ -12,7 +12,9 @@ const steps = [
 
 export function TestDriveCtaSection() {
   return (
-    <section className="relative bg-gradient-to-br from-luxury-black via-luxury-charcoal to-luxury-black">
+<<<<<<< HEAD
+    <section className="relative overflow-hidden bg-gradient-to-br from-luxury-black via-luxury-charcoal to-luxury-black">
+>>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
       {/* Background Image with overlay */}
       <div className="absolute inset-0 z-0 opacity-30">
         <Image

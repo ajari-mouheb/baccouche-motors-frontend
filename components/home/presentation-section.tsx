@@ -14,7 +14,7 @@ const highlights = [
 
 export function PresentationSection() {
   return (
-    <section id="presentation" className="section-padding">
+    <section id="presentation" className="section-padding pt-32">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid gap-16 lg:grid-cols-2 lg:items-center lg:gap-20">
           {/* Image Side */}
@@ -42,7 +42,9 @@ export function PresentationSection() {
             </div>
 
             {/* Decorative background */}
-            <div className="absolute -z-10 left-0 top-0 h-full w-full rounded-2xl border-2 border-luxury-accent/20 translate-x-0" />
+<<<<<<< HEAD
+            <div className="absolute -z-10 -left-4 -top-4 h-full w-full rounded-2xl border-2 border-luxury-accent/20" />
+>>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
           </div>
 
           {/* Content Side */}
