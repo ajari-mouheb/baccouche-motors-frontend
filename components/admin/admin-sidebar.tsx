@@ -11,8 +11,8 @@ import {
   FileText,
   Mail,
   Menu,
+  X,
   Home,
-  ChevronLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +20,6 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
@@ -168,45 +167,54 @@ export function AdminSidebar() {
 
       {/* Mobile: menu button + sheet */}
       <div className="fixed left-4 top-4 z-50 lg:hidden">
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              aria-label="Menu Admin"
-              className="size-10 rounded-full border-border/50 bg-background/95 shadow-lg backdrop-blur"
-            >
-              <Menu className="size-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-72 border-border/50 bg-card p-0">
-            <div className="flex h-full flex-col">
-              {/* Logo header */}
-              <div className="flex h-16 items-center gap-3 border-b border-border/50 px-4">
-                <Image
-                  src="/logo.png"
-                  alt="Baccouche Automobiles"
-                  width={120}
-                  height={36}
-                  className="h-8 w-auto object-contain brightness-0 invert opacity-90"
-                />
-              </div>
-
-              {/* Navigation */}
-              <nav className="flex-1 overflow-y-auto p-4">
-                <NavContent onLinkClick={() => setOpen(false)} />
-              </nav>
-
-              {/* Footer */}
-              <div className="border-t border-border/50 p-4">
-                <p className="text-xs text-muted-foreground/60">
-                  © {new Date().getFullYear()} Baccouche Motors
-                </p>
-              </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+        <Button
+          variant="outline"
+          size="icon"
+          aria-label="Menu Admin"
+          className="size-10 rounded-full border-border/50 bg-background/95 shadow-lg backdrop-blur"
+          onClick={() => setOpen(true)}
+        >
+          <Menu className="size-5" />
+        </Button>
       </div>
+
+      {/* Mobile sheet */}
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent side="left" className="w-72 border-border/50 bg-card p-0">
+          <div className="flex min-h-full flex-col">
+            {/* Logo header */}
+            <div className="flex h-16 items-center justify-between border-b border-border/50 px-4">
+              <Image
+                src="/logo.png"
+                alt="Baccouche Automobiles"
+                width={120}
+                height={36}
+                className="h-8 w-auto object-contain brightness-0 invert opacity-90"
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-8"
+                onClick={() => setOpen(false)}
+              >
+                <X className="size-4" />
+              </Button>
+            </div>
+
+            {/* Navigation */}
+            <nav className="flex-1 overflow-y-auto p-4">
+              <NavContent onLinkClick={() => setOpen(false)} />
+            </nav>
+
+            {/* Footer */}
+            <div className="border-t border-border/50 p-4">
+              <p className="text-xs text-muted-foreground/60">
+                © {new Date().getFullYear()} Baccouche Motors
+              </p>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </>
   );
 }

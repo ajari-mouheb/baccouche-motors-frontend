@@ -34,9 +34,9 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:backdrop-blur-md transition-colors",
+        "fixed top-0 left-0 right-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:backdrop-blur-md transition-colors",
         isHome
-          ? "border-transparent bg-transparent -mb-16 md:-mb-20"
+          ? "border-transparent bg-transparent"
           : "border-border bg-background/95 supports-[backdrop-filter]:bg-background/60"
       )}
     >

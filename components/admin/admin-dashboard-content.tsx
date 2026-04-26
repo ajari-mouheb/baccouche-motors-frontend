@@ -23,7 +23,13 @@ import {
   CheckCircle,
   XCircle,
   CalendarDays,
+  TrendingUp,
+  Activity,
+  ArrowRight,
 } from "lucide-react";
+import { TestDrivesChart } from "./charts/test-drives-chart";
+import { StatusChart } from "./charts/status-chart";
+import { ActivityFeed } from "./activity-feed";
 
 const statusVariant: Record<string, "pending" | "confirmed" | "completed" | "rejected" | "destructive"> = {
   pending: "pending",
@@ -65,6 +71,9 @@ export function AdminDashboardContent() {
   const pendingTestDrives = testDrives.filter((t) => t.status === "pending");
   const confirmedTestDrives = testDrives.filter((t) => t.status === "confirmed");
   const recentTestDrives = testDrives.slice(0, 5);
+
+  // Calculate trends (mock for now, could be real with more data)
+  const unreadContacts = contacts.filter((c) => !c.read).length;
 
   async function handleConfirm(id: string) {
     try {
@@ -130,7 +139,7 @@ export function AdminDashboardContent() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Stats Grid */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
@@ -143,6 +152,7 @@ export function AdminDashboardContent() {
         <StatCard
           title="Messages contact"
           value={contacts.length}
+          subtitle={unreadContacts > 0 ? `${unreadContacts} non lus` : undefined}
           icon={Mail}
           variant="info"
         />
@@ -160,156 +170,150 @@ export function AdminDashboardContent() {
         />
       </div>
 
-      {/* Quick Stats Row */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-transparent p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/20">
-              <Clock className="size-5 text-amber-500" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-foreground">
-                {pendingTestDrives.length}
-              </p>
-              <p className="text-xs text-muted-foreground">En attente</p>
-            </div>
-          </div>
+      {/* Charts Row */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2 rounded-xl border border-border/50 bg-card p-6">
+          <TestDrivesChart />
         </div>
-        <div className="rounded-xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-transparent p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/20">
-              <CheckCircle className="size-5 text-emerald-500" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-foreground">
-                {confirmedTestDrives.length}
-              </p>
-              <p className="text-xs text-muted-foreground">Confirmées</p>
-            </div>
-          </div>
-        </div>
-        <div className="rounded-xl border border-luxury-accent/20 bg-gradient-to-br from-luxury-accent/10 to-transparent p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-luxury-accent/20">
-              <CalendarDays className="size-5 text-luxury-accent" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-foreground">
-                {testDrives.filter((t) => t.status === "completed").length}
-              </p>
-              <p className="text-xs text-muted-foreground">Terminées</p>
-            </div>
-          </div>
+        <div className="rounded-xl border border-border/50 bg-card p-6">
+          <StatusChart />
         </div>
       </div>
 
-      {/* Recent Test Drives Table */}
-      <div className="rounded-xl border border-border/50 bg-card/50">
-        <div className="flex items-center justify-between border-b border-border/50 p-4 lg:p-6">
-          <div>
-            <h2 className="font-serif text-xl font-semibold text-foreground">
-              Dernières demandes Test Drive
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Cliquez sur une ligne pour voir les détails
-            </p>
+      {/* Quick Stats and Activity */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Quick Stats */}
+        <div className="lg:col-span-2 space-y-4">
+          <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <TrendingUp className="size-5 text-luxury-accent" />
+            Aperçu Rapide
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="rounded-xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-transparent p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/20">
+                  <Clock className="size-5 text-amber-500" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-foreground">
+                    {pendingTestDrives.length}
+                  </p>
+                  <p className="text-xs text-muted-foreground">En attente</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-transparent p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/20">
+                  <CheckCircle className="size-5 text-emerald-500" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-foreground">
+                    {confirmedTestDrives.length}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Confirmées</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-xl border border-luxury-accent/20 bg-gradient-to-br from-luxury-accent/10 to-transparent p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-luxury-accent/20">
+                  <CalendarDays className="size-5 text-luxury-accent" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-foreground">
+                    {testDrives.filter((t) => t.status === "completed").length}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Terminées</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <Link href="/admin/test-drives">
-            <Button variant="outline" size="sm" className="gap-1.5">
-              <ExternalLink className="size-4" />
-              Voir tout
-            </Button>
-          </Link>
-        </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border/50 bg-muted/30">
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Client
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Modèle
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Date souhaitée
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Statut
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border/50">
-              {recentTestDrives.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={4}
-                    className="px-4 py-12 text-center text-muted-foreground"
-                  >
-                    <div className="flex flex-col items-center gap-2">
-                      <Car className="size-8 text-muted-foreground/50" />
-                      <p>Aucune demande de test drive pour le moment.</p>
-                    </div>
-                  </td>
-                </tr>
-              ) : (
-                recentTestDrives.map((td) => {
-                  const StatusIcon = statusIcon[td.status] || Clock;
-                  return (
-                    <tr
-                      key={td.id}
-                      className="cursor-pointer transition-colors hover:bg-muted/30"
-                      onClick={() => {
-                        setDetailTestDrive(td);
-                        setDetailOpen(true);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          setDetailTestDrive(td);
-                          setDetailOpen(true);
-                        }
-                      }}
-                      role="button"
-                      tabIndex={0}
-                    >
-                      <td className="px-4 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-sm font-medium">
-                            {td.name.charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <p className="font-medium text-foreground">
-                              {td.name}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {td.email}
-                            </p>
-                          </div>
+          {/* Recent Test Drives Table */}
+          <div className="rounded-xl border border-border/50 bg-card/50">
+            <div className="flex items-center justify-between border-b border-border/50 p-4">
+              <h3 className="font-semibold text-foreground">
+                Dernières demandes Test Drive
+              </h3>
+              <Link href="/admin/test-drives">
+                <Button variant="ghost" size="sm" className="gap-1.5 text-luxury-accent">
+                  Voir tout
+                  <ArrowRight className="size-4" />
+                </Button>
+              </Link>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border/50 bg-muted/30">
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Client
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Modèle
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Date
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Statut
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/50">
+                  {recentTestDrives.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-4 py-12 text-center text-muted-foreground">
+                        <div className="flex flex-col items-center gap-2">
+                          <Car className="size-8 text-muted-foreground/50" />
+                          <p>Aucune demande de test drive pour le moment.</p>
                         </div>
                       </td>
-                      <td className="px-4 py-4">
-                        <span className="font-medium">{td.model}</span>
-                      </td>
-                      <td className="px-4 py-4 text-muted-foreground">
-                        {td.preferredDate ?? "—"}
-                      </td>
-                      <td className="px-4 py-4">
-                        <Badge
-                          variant={statusVariant[td.status]}
-                          className="gap-1"
-                        >
-                          <StatusIcon className="size-3" />
-                          {statusLabel[td.status]}
-                        </Badge>
-                      </td>
                     </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+                  ) : (
+                    recentTestDrives.map((td) => {
+                      const StatusIcon = statusIcon[td.status] || Clock;
+                      return (
+                        <tr
+                          key={td.id}
+                          className="cursor-pointer transition-colors hover:bg-muted/30"
+                          onClick={() => {
+                            setDetailTestDrive(td);
+                            setDetailOpen(true);
+                          }}
+                        >
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-3">
+                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-xs font-medium">
+                                {td.name.charAt(0).toUpperCase()}
+                              </div>
+                              <span className="font-medium">{td.name}</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3">{td.model}</td>
+                          <td className="px-4 py-3 text-muted-foreground">
+                            {td.preferredDate ?? "—"}
+                          </td>
+                          <td className="px-4 py-3">
+                            <Badge variant={statusVariant[td.status]} className="gap-1">
+                              <StatusIcon className="size-3" />
+                              {statusLabel[td.status]}
+                            </Badge>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        {/* Activity Feed */}
+        <div className="rounded-xl border border-border/50 bg-card p-6">
+          <ActivityFeed />
         </div>
       </div>
 

@@ -26,9 +26,15 @@ export interface Car {
   make?: string;
   year: number;
   price?: string;
-  image: string;
+  image: string | null;
+  images?: string[];
   description: string;
   specs?: Record<string, string>;
+  color?: string;
+  fuelType?: string;
+  transmission?: string;
+  mileage?: number;
+  status?: string;
 }
 
 export interface TestDriveCreateLoggedIn {

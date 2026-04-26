@@ -40,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className={cn("dark", "font-sans", geist.variable)}>
       <body
-        className={`${cormorant.variable} ${geist.variable} antialiased min-h-screen flex flex-col font-sans`}
+        className={`${cormorant.variable} ${geist.variable} antialiased min-h-screen flex flex-col font-sans overflow-x-hidden`}
       >
         <Providers>
           <SiteChrome>{children}</SiteChrome>

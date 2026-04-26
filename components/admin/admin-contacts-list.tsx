@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Reply, Check, Eye } from "lucide-react";
+import { Reply, Check, Eye, Mail, Phone, Clock, User, MessageSquare, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import type { Contact } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
@@ -79,8 +79,11 @@ export function AdminContactsList() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[200px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-luxury-accent border-t-transparent" />
+      <div className="flex min-h-[300px] items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-luxury-accent border-t-transparent" />
+          <p className="text-sm text-muted-foreground">Chargement...</p>
+        </div>
       </div>
     );
   }
@@ -105,6 +108,7 @@ export function AdminContactsList() {
 
   return (
     <div className="space-y-6">
+      {/* Filter */}
       <div className="flex justify-end">
         <Select
           value={readFilter}
@@ -120,96 +124,134 @@ export function AdminContactsList() {
           </SelectContent>
         </Select>
       </div>
-      <div className="space-y-6">
+
+      {/* Messages */}
+      <div className="space-y-4">
         {filtered.map((contact) => (
           <div
             key={contact.id}
-            className="rounded-xl border border-border bg-card p-6 shadow-sm"
+            className={`group overflow-hidden rounded-xl border transition-all hover:shadow-md ${
+              contact.read
+                ? "border-border/50 bg-card/50"
+                : "border-luxury-accent/30 bg-gradient-to-br from-luxury-accent/5 to-transparent"
+            }`}
           >
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-3">
-                <p className="font-semibold">{contact.name}</p>
-                {contact.subject && (
-                  <Badge variant="outline" className="text-xs">
-                    {contact.subject}
-                  </Badge>
-                )}
-                {!contact.read && <Badge variant="unread">Non lu</Badge>}
+            <div className="p-5">
+              {/* Header */}
+              <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                    contact.read ? "bg-muted" : "bg-luxury-accent/10"
+                  }`}>
+                    <User className={`size-5 ${contact.read ? "text-muted-foreground" : "text-luxury-accent"}`} />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">{contact.name}</p>
+                    <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                      <a
+                        href={`mailto:${contact.email}`}
+                        className="flex items-center gap-1 text-luxury-accent hover:underline"
+                      >
+                        <Mail className="size-3" />
+                        {contact.email}
+                      </a>
+                      {contact.phone && (
+                        <a
+                          href={`tel:${contact.phone}`}
+                          className="flex items-center gap-1 hover:text-foreground"
+                        >
+                          <Phone className="size-3" />
+                          {contact.phone}
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  {contact.subject && (
+                    <Badge variant="outline" className="text-xs">
+                      {contact.subject}
+                    </Badge>
+                  )}
+                  {!contact.read && (
+                    <Badge variant="unread" className="gap-1">
+                      <Clock className="size-3" />
+                      Non lu
+                    </Badge>
+                  )}
+                </div>
               </div>
-              {!contact.read && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => toggleRead(contact.id)}
-                  className="gap-1.5"
-                >
-                  <Check className="size-4" />
-                  Marquer comme lu
-                </Button>
-              )}
-            </div>
-            <div className="mb-4 flex flex-wrap gap-4">
-              <a
-                href={`mailto:${contact.email}`}
-                className="text-sm text-luxury-accent hover:underline"
-              >
-                {contact.email}
-              </a>
-              {contact.phone && (
-                <a
-                  href={`tel:${contact.phone}`}
-                  className="text-sm text-muted-foreground hover:text-foreground"
-                >
-                  {contact.phone}
-                </a>
-              )}
-            </div>
-            <p className="text-muted-foreground">{contact.message}</p>
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
-              <p className="text-xs text-muted-foreground">
-                {new Date(contact.createdAt).toLocaleString("fr-FR")}
+
+              {/* Message Preview */}
+              <p className="mb-4 line-clamp-2 text-muted-foreground">
+                {contact.message}
               </p>
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-1.5"
-                  onClick={() => {
-                    setDetailContact(contact);
-                    setDetailOpen(true);
-                  }}
-                >
-                  <Eye className="size-4" />
-                  Voir détails
-                </Button>
-                <Button variant="outline" size="sm" asChild>
-                  <a
-                    href={`mailto:${contact.email}${contact.subject ? `?subject=Re: ${encodeURIComponent(contact.subject)}` : ""}`}
-                    className="inline-flex items-center gap-2"
+
+              {/* Footer */}
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <p className="text-xs text-muted-foreground">
+                  <Clock className="mr-1 inline size-3" />
+                  {new Date(contact.createdAt).toLocaleString("fr-FR", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {!contact.read && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => toggleRead(contact.id)}
+                      className="gap-1.5"
+                    >
+                      <Check className="size-4" />
+                      Marquer lu
+                    </Button>
+                  )}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setDetailContact(contact);
+                      setDetailOpen(true);
+                    }}
+                    className="gap-1.5"
                   >
-                    <Reply className="size-4" />
-                    Répondre
-                  </a>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-destructive hover:text-destructive"
-                  onClick={() => setDeleteId(contact.id)}
-                >
-                  Supprimer
-                </Button>
+                    <Eye className="size-4" />
+                    Détails
+                  </Button>
+                  <Button variant="outline" size="sm" asChild className="gap-1.5">
+                    <a
+                      href={`mailto:${contact.email}${contact.subject ? `?subject=Re: ${encodeURIComponent(contact.subject)}` : ""}`}
+                    >
+                      <Reply className="size-4" />
+                      Répondre
+                    </a>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10"
+                    onClick={() => setDeleteId(contact.id)}
+                  >
+                    <Trash2 className="size-4" />
+                    <span className="hidden sm:inline">Supprimer</span>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+
       {filtered.length === 0 && (
-        <p className="py-12 text-center text-muted-foreground">
-          Aucun message pour ce filtre.
-        </p>
+        <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+          <MessageSquare className="mb-2 size-8 text-muted-foreground/50" />
+          <p>Aucun message pour ce filtre.</p>
+        </div>
       )}
 
+      {/* Dialogs */}
       <ContactDetailDialog
         contact={detailContact}
         open={detailOpen}
@@ -221,7 +263,7 @@ export function AdminContactsList() {
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
         title="Supprimer le message"
-        description="Cette action est irréversible."
+        description="Cette action est irréversible. Le message sera définitivement supprimé."
         confirmLabel="Supprimer"
         variant="destructive"
         onConfirm={confirmDelete}
