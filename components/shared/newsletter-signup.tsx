@@ -88,8 +88,8 @@ export function NewsletterSignup({
   return (
     <div className={cn("rounded-xl border border-border/50 bg-card p-6 md:p-8", className)}>
       <div className="mb-4 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-luxury-accent/10">
-          <Mail className="h-5 w-5 text-luxury-accent" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+          <Mail className="h-5 w-5 text-primary" />
         </div>
         <div>
           <h3 className="font-semibold text-foreground">Newsletter</h3>

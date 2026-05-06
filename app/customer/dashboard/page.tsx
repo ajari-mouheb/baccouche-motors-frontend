@@ -42,7 +42,7 @@ export default function CustomerDashboardPage() {
   return (
     <div className="space-y-8">
       {/* Welcome Banner */}
-      <div className="rounded-2xl border border-border/50 bg-gradient-to-br from-luxury-accent/10 via-luxury-accent/5 to-transparent p-6 md:p-8">
+      <div className="rounded-2xl border border-border/50 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 md:p-8">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-sm text-muted-foreground">{greeting}</p>
@@ -54,8 +54,8 @@ export default function CustomerDashboardPage() {
             </p>
           </div>
           <div className="hidden shrink-0 md:block">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-luxury-accent/20">
-              <User className="h-8 w-8 text-luxury-accent" />
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/20">
+              <User className="h-8 w-8 text-primary" />
             </div>
           </div>
         </div>
@@ -99,10 +99,10 @@ export default function CustomerDashboardPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-luxury-accent/20 bg-gradient-to-br from-luxury-accent/10 to-transparent p-4">
+        <div className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/10 to-transparent p-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-luxury-accent/20">
-              <Car className="h-5 w-5 text-luxury-accent" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20">
+              <Car className="h-5 w-5 text-primary" />
             </div>
             <div>
               <p className="text-2xl font-bold text-foreground">{testDrives.length}</p>
@@ -119,7 +119,7 @@ export default function CustomerDashboardPage() {
             <h2 className="font-semibold text-foreground">Prochains essais</h2>
             <Link
               href="/customer/test-drives"
-              className="text-sm font-medium text-luxury-accent hover:underline"
+              className="text-sm font-medium text-primary hover:underline"
             >
               Voir tout
             </Link>
@@ -166,10 +166,10 @@ export default function CustomerDashboardPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Link
             href="/customer/test-drives"
-            className="group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-all hover:border-luxury-accent/30 hover:shadow-md"
+            className="group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/30 hover:shadow-md"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-luxury-accent/10 transition-colors group-hover:bg-luxury-accent/20">
-              <Car className="h-6 w-6 text-luxury-accent" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 transition-colors group-hover:bg-primary/20">
+              <Car className="h-6 w-6 text-primary" />
             </div>
             <div>
               <h3 className="font-semibold text-foreground">Mes demandes</h3>
@@ -181,7 +181,7 @@ export default function CustomerDashboardPage() {
 
           <Link
             href="/test-drive"
-            className="group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-all hover:border-luxury-accent/30 hover:shadow-md"
+            className="group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/30 hover:shadow-md"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 transition-colors group-hover:bg-emerald-500/20">
               <CalendarPlus className="h-6 w-6 text-emerald-500" />
@@ -196,7 +196,7 @@ export default function CustomerDashboardPage() {
 
           <Link
             href="/cars"
-            className="group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-all hover:border-luxury-accent/30 hover:shadow-md"
+            className="group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/30 hover:shadow-md"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 transition-colors group-hover:bg-blue-500/20">
               <CarFront className="h-6 w-6 text-blue-500" />
@@ -211,7 +211,7 @@ export default function CustomerDashboardPage() {
 
           <Link
             href="/contact"
-            className="group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-all hover:border-luxury-accent/30 hover:shadow-md"
+            className="group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/30 hover:shadow-md"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10 transition-colors group-hover:bg-purple-500/20">
               <Mail className="h-6 w-6 text-purple-500" />

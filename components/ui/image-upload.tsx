@@ -177,8 +177,8 @@ export function ImageUpload({
             "relative overflow-hidden rounded-xl border-2 border-dashed cursor-pointer transition-all",
             aspectRatioClasses[aspectRatio],
             isDragging
-              ? "border-luxury-accent bg-luxury-accent/5"
-              : "border-border hover:border-luxury-accent/50 hover:bg-muted/50",
+              ? "border-primary bg-primary/5"
+              : "border-border hover:border-primary/50 hover:bg-muted/50",
             disabled && "opacity-50 cursor-not-allowed"
           )}
         >

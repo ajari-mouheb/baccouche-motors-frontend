@@ -42,26 +42,24 @@ export function ShowroomSection() {
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
               {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/30 via-transparent to-transparent" />
             </div>
 
             {/* Floating badge */}
             <div className="absolute -bottom-6 -right-6 z-10 hidden lg:block">
-              <div className="rounded-2xl border border-luxury-accent/30 bg-card p-6 shadow-xl">
-                <div className="mb-2 text-3xl font-bold text-luxury-accent">25+</div>
+              <div className="rounded-2xl border border-primary/30 bg-card p-6 shadow-xl">
+                <div className="mb-2 text-3xl font-bold text-primary">25+</div>
                 <div className="text-sm text-muted-foreground">Années d&apos;expertise</div>
               </div>
             </div>
 
             {/* Decorative border */}
-<<<<<<< HEAD
-            <div className="absolute -z-10 -left-4 -top-4 h-full w-full rounded-2xl border-2 border-luxury-accent/20" />
->>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
+            <div className="absolute -z-10 -left-4 -top-4 h-full w-full rounded-2xl border-2 border-primary/20" />
           </div>
 
           {/* Content Side */}
           <div className="flex flex-col justify-center">
-            <span className="mb-4 inline-block rounded-full bg-luxury-accent/10 px-4 py-1.5 text-sm font-medium text-luxury-accent">
+            <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
               Notre showroom
             </span>
 
@@ -80,10 +78,10 @@ export function ShowroomSection() {
               {showroomFeatures.map((feature) => (
                 <div
                   key={feature.title}
-                  className="flex items-start gap-4 rounded-xl border border-border/50 bg-card p-4 transition-all hover:border-luxury-accent/30 hover:shadow-md"
+                  className="flex items-start gap-4 rounded-xl border border-border/50 bg-card p-4 transition-all hover:border-primary/30 hover:shadow-md"
                 >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-luxury-accent/10">
-                    <feature.icon className="h-5 w-5 text-luxury-accent" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                    <feature.icon className="h-5 w-5 text-primary" />
                   </div>
                   <div>
                     <div className="font-semibold text-foreground">{feature.title}</div>
@@ -98,7 +96,7 @@ export function ShowroomSection() {
               <Button
                 asChild
                 size="lg"
-                className="rounded-lg bg-luxury-accent px-6 text-primary hover:bg-luxury-accent/90"
+                className="rounded-lg bg-primary px-6 text-primary hover:bg-primary/90"
               >
                 <Link href="/contact">Prendre rendez-vous</Link>
               </Button>
@@ -106,7 +104,7 @@ export function ShowroomSection() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="rounded-lg border-luxury-accent/50 px-6 hover:border-luxury-accent hover:bg-luxury-accent/5"
+                className="rounded-lg border-primary/50 px-6 hover:border-primary hover:bg-primary/5"
               >
                 <Link href="/about">En savoir plus</Link>
               </Button>

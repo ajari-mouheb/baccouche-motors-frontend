@@ -131,7 +131,7 @@ export function AdminDashboardContent() {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-luxury-accent border-t-transparent" />
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
           <p className="text-sm text-muted-foreground">Chargement...</p>
         </div>
       </div>
@@ -185,7 +185,7 @@ export function AdminDashboardContent() {
         {/* Quick Stats */}
         <div className="lg:col-span-2 space-y-4">
           <h2 className="flex items-center gap-2 text-lg font-semibold">
-            <TrendingUp className="size-5 text-luxury-accent" />
+            <TrendingUp className="size-5 text-primary" />
             Aperçu Rapide
           </h2>
           <div className="grid gap-4 sm:grid-cols-3">
@@ -215,10 +215,10 @@ export function AdminDashboardContent() {
                 </div>
               </div>
             </div>
-            <div className="rounded-xl border border-luxury-accent/20 bg-gradient-to-br from-luxury-accent/10 to-transparent p-4">
+            <div className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/10 to-transparent p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-luxury-accent/20">
-                  <CalendarDays className="size-5 text-luxury-accent" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20">
+                  <CalendarDays className="size-5 text-primary" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-foreground">
@@ -237,7 +237,7 @@ export function AdminDashboardContent() {
                 Dernières demandes Test Drive
               </h3>
               <Link href="/admin/test-drives">
-                <Button variant="ghost" size="sm" className="gap-1.5 text-luxury-accent">
+                <Button variant="ghost" size="sm" className="gap-1.5 text-primary">
                   Voir tout
                   <ArrowRight className="size-4" />
                 </Button>

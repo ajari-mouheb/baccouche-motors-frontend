@@ -47,8 +47,8 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
   return (
     <>
       <div className="mb-6 flex items-center gap-3 px-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-luxury-accent/20 to-luxury-accent/5">
-          <User className="size-5 text-luxury-accent" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/15 to-primary/5">
+          <User className="size-5 text-primary" />
         </div>
         <div className="flex flex-col">
           <span className="text-sm font-semibold text-foreground">Espace client</span>
@@ -71,7 +71,7 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
               className={cn(
                 "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                 isActive
-                  ? "bg-luxury-accent/15 text-luxury-accent shadow-sm"
+                  ? "bg-primary/10 text-primary shadow-sm"
                   : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
               )}
             >
@@ -79,7 +79,7 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
                 className={cn(
                   "flex h-8 w-8 items-center justify-center rounded-md transition-colors",
                   isActive
-                    ? "bg-luxury-accent/20"
+                    ? "bg-primary/15"
                     : "bg-muted/40 group-hover:bg-muted"
                 )}
               >
@@ -132,7 +132,7 @@ export function CustomerSidebar() {
               alt="Baccouche Automobiles"
               width={120}
               height={36}
-              className="h-8 w-auto object-contain brightness-0 invert opacity-90"
+              className="h-8 w-auto object-contain opacity-90"
             />
           </div>
 
@@ -174,7 +174,7 @@ export function CustomerSidebar() {
                 alt="Baccouche Automobiles"
                 width={120}
                 height={36}
-                className="h-8 w-auto object-contain brightness-0 invert opacity-90"
+                className="h-8 w-auto object-contain opacity-90"
               />
               <Button
                 variant="ghost"

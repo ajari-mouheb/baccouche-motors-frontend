@@ -32,7 +32,7 @@ export function ContactDetailDialog({
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <MessageSquare className="size-5 text-luxury-accent" />
+            <MessageSquare className="size-5 text-primary" />
             Message de {contact.name}
           </DialogTitle>
         </DialogHeader>
@@ -60,7 +60,7 @@ export function ContactDetailDialog({
         <div className="space-y-4">
           {/* Subject */}
           {contact.subject && (
-            <div className="rounded-lg border border-border/50 bg-gradient-to-br from-luxury-accent/5 to-transparent p-4">
+            <div className="rounded-lg border border-border/50 bg-gradient-to-br from-primary/5 to-transparent p-4">
               <p className="mb-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Sujet
               </p>
@@ -90,7 +90,7 @@ export function ContactDetailDialog({
                 </div>
                 <a
                   href={`mailto:${contact.email}`}
-                  className="text-luxury-accent hover:underline"
+                  className="text-primary hover:underline"
                 >
                   {contact.email}
                 </a>
@@ -102,7 +102,7 @@ export function ContactDetailDialog({
                   </div>
                   <a
                     href={`tel:${contact.phone}`}
-                    className="text-foreground hover:text-luxury-accent transition-colors"
+                    className="text-foreground hover:text-primary transition-colors"
                   >
                     {contact.phone}
                   </a>

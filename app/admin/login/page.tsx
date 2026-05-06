@@ -110,7 +110,7 @@ export default function AdminLoginPage() {
           />
           <Button
             type="submit"
-            variant="luxury"
+            variant="default"
             className="w-full"
             disabled={isSubmitting}
           >

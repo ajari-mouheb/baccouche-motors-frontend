@@ -19,10 +19,10 @@ const variantStyles = {
     accent: "bg-muted/50",
   },
   accent: {
-    card: "bg-gradient-to-br from-luxury-accent/10 to-luxury-accent/5 hover:from-luxury-accent/15 hover:to-luxury-accent/5",
-    icon: "bg-luxury-accent/20 text-luxury-accent",
+    card: "bg-gradient-to-br from-primary/10 to-primary/5 hover:from-primary/15 hover:to-primary/5",
+    icon: "bg-primary/20 text-primary",
     value: "text-foreground",
-    accent: "bg-luxury-accent/10",
+    accent: "bg-primary/10",
   },
   success: {
     card: "bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 hover:from-emerald-500/15 hover:to-emerald-500/5",

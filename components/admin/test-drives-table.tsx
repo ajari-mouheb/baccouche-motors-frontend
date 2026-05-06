@@ -233,7 +233,7 @@ export function TestDrivesTable() {
     return (
       <div className="flex min-h-[300px] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-luxury-accent border-t-transparent" />
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
           <p className="text-sm text-muted-foreground">Chargement...</p>
         </div>
       </div>
@@ -287,7 +287,7 @@ export function TestDrivesTable() {
 
       {/* Bulk Actions Bar */}
       {someSelected && (
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-luxury-accent/30 bg-luxury-accent/5 p-3">
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-primary/30 bg-primary/5 p-3">
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium">
               {selectedIds.size} sélectionnée(s)
@@ -348,8 +348,8 @@ export function TestDrivesTable() {
                     className={cn(
                       "flex h-5 w-5 items-center justify-center rounded border transition-colors",
                       allSelectableSelected
-                        ? "bg-luxury-accent border-luxury-accent"
-                        : "border-border hover:border-luxury-accent"
+                        ? "bg-primary border-primary"
+                        : "border-border hover:border-primary"
                     )}
                     aria-label="Sélectionner tout"
                   >
@@ -402,7 +402,7 @@ export function TestDrivesTable() {
                       key={td.id}
                       className={cn(
                         "transition-colors hover:bg-muted/30",
-                        isSelected && "bg-luxury-accent/5"
+                        isSelected && "bg-primary/5"
                       )}
                     >
                       <td className="px-4 py-4">
@@ -412,9 +412,9 @@ export function TestDrivesTable() {
                           className={cn(
                             "flex h-5 w-5 items-center justify-center rounded border transition-colors",
                             isSelected
-                              ? "bg-luxury-accent border-luxury-accent"
+                              ? "bg-primary border-primary"
                               : isSelectable
-                              ? "border-border hover:border-luxury-accent cursor-pointer"
+                              ? "border-border hover:border-primary cursor-pointer"
                               : "border-border/50 opacity-50 cursor-not-allowed"
                           )}
                           aria-label="Sélectionner"
@@ -442,7 +442,7 @@ export function TestDrivesTable() {
                         <div className="flex flex-col gap-0.5">
                           <a
                             href={`mailto:${td.email}`}
-                            className="text-sm text-luxury-accent hover:underline"
+                            className="text-sm text-primary hover:underline"
                           >
                             {td.email}
                           </a>

@@ -31,18 +31,18 @@ export function NewsletterSection() {
   };
 
   return (
-    <section className="section-padding bg-gradient-to-br from-luxury-black to-luxury-charcoal">
+    <section className="section-padding bg-gradient-to-br from-muted to-background">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white/80">
-            <Sparkles className="h-4 w-4 text-luxury-accent" />
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-muted px-4 py-2 text-sm text-foreground/80">
+            <Sparkles className="h-4 w-4 text-primary" />
             <span>Restez informé</span>
           </div>
 
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
             Recevez nos dernières actualités
           </h2>
-          <p className="mb-8 text-lg text-white/70">
+          <p className="mb-8 text-lg text-foreground/70">
             Inscrivez-vous à notre newsletter pour découvrir nos nouvelles arrivées,
             offres exclusives et actualités BMW.
           </p>
@@ -57,14 +57,14 @@ export function NewsletterSection() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={status === "loading" || status === "success"}
-                  className="h-12 sm:h-14 rounded-lg sm:rounded-r-none border-0 bg-white pl-12 text-foreground focus-visible:ring-luxury-accent w-full"
+                  className="h-12 sm:h-14 rounded-lg sm:rounded-r-none border-0 bg-background pl-12 text-foreground focus-visible:ring-primary w-full"
                 />
               </div>
               <Button
                 type="submit"
                 size="lg"
                 disabled={status === "loading" || status === "success"}
-                className="h-12 sm:h-14 rounded-lg sm:rounded-l-none sm:px-6 bg-luxury-accent text-primary hover:bg-luxury-accent/90 w-full sm:w-auto"
+                className="h-12 sm:h-14 rounded-lg sm:rounded-l-none sm:px-6 bg-primary text-primary hover:bg-primary/90 w-full sm:w-auto"
               >
                 {status === "loading" ? (
                   <>
@@ -88,7 +88,7 @@ export function NewsletterSection() {
               </p>
             )}
 
-            <p className="mt-4 text-sm text-white/50">
+            <p className="mt-4 text-sm text-muted-foreground">
               En vous inscrivant, vous acceptez de recevoir nos communications par email.
               Vous pouvez vous désinscrire à tout moment.
             </p>
@@ -102,8 +102,8 @@ export function NewsletterSection() {
               { title: "Conseils experts", desc: "Entretien et conseils de nos spécialistes" },
             ].map((benefit) => (
               <div key={benefit.title} className="text-center">
-                <h3 className="mb-1 font-semibold text-white">{benefit.title}</h3>
-                <p className="text-sm text-white/60">{benefit.desc}</p>
+                <h3 className="mb-1 font-semibold text-foreground">{benefit.title}</h3>
+                <p className="text-sm text-foreground/60">{benefit.desc}</p>
               </div>
             ))}
           </div>

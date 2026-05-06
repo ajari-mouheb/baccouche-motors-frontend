@@ -111,7 +111,7 @@ export default function CustomerLoginPage() {
           />
           <Button
             type="submit"
-            variant="luxury"
+            variant="default"
             className="w-full"
             disabled={isSubmitting}
           >
@@ -129,7 +129,7 @@ export default function CustomerLoginPage() {
       <p className="mt-4 text-center text-sm text-muted-foreground">
         <Link
           href="/customer/forgot-password"
-          className="font-medium text-luxury-accent hover:underline"
+          className="font-medium text-primary hover:underline"
         >
           Mot de passe oublié ?
         </Link>
@@ -138,7 +138,7 @@ export default function CustomerLoginPage() {
         Pas encore de compte ?{" "}
         <Link
           href="/customer/register"
-          className="font-medium text-luxury-accent hover:underline"
+          className="font-medium text-primary hover:underline"
         >
           S&apos;inscrire
         </Link>

@@ -27,15 +27,15 @@ export default function TestDrivePage() {
             className="absolute inset-0 z-10"
             style={{
               background:
-                "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.7) 100%)",
+                "linear-gradient(to bottom, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.9) 100%)",
             }}
           />
         </div>
         <div className="container relative z-20 mx-auto px-4 md:px-6 text-center">
-          <h1 className="hero-title text-white drop-shadow-lg">
+          <h1 className="hero-title text-foreground drop-shadow-lg">
             Réserver un Test Drive
           </h1>
-          <p className="mt-4 text-lg text-white/90 max-w-2xl mx-auto">
+          <p className="mt-4 text-lg text-foreground/90 max-w-2xl mx-auto">
             Vivez l&apos;expérience BMW. Notre équipe vous contactera sous 24h pour organiser votre essai.
           </p>
         </div>
@@ -55,20 +55,20 @@ export default function TestDrivePage() {
               </h2>
               <ul className="space-y-4 text-muted-foreground">
                 <li className="flex items-start gap-3">
-                  <span className="inline-block size-8 shrink-0 rounded-full bg-luxury-accent/20 text-center font-semibold text-luxury-accent leading-8">1</span>
+                  <span className="inline-block size-8 shrink-0 rounded-full bg-primary/15 text-center font-semibold text-primary leading-8">1</span>
                   <span>Essai gratuit, sans engagement</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="inline-block size-8 shrink-0 rounded-full bg-luxury-accent/20 text-center font-semibold text-luxury-accent leading-8">2</span>
+                  <span className="inline-block size-8 shrink-0 rounded-full bg-primary/15 text-center font-semibold text-primary leading-8">2</span>
                   <span>Réponse sous 24h garantie</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="inline-block size-8 shrink-0 rounded-full bg-luxury-accent/20 text-center font-semibold text-luxury-accent leading-8">3</span>
+                  <span className="inline-block size-8 shrink-0 rounded-full bg-primary/15 text-center font-semibold text-primary leading-8">3</span>
                   <span>Conseils personnalisés par nos experts</span>
                 </li>
               </ul>
             </div>
-            <div className="rounded-xl border border-luxury-accent/30 bg-luxury-accent/5 p-6">
+            <div className="rounded-xl border border-primary/30 bg-primary/5 p-6">
               <p className="font-semibold text-foreground">Réponse sous 24h</p>
               <p className="mt-1 text-sm text-muted-foreground">
                 Notre équipe vous recontactera rapidement pour confirmer votre créneau.
@@ -83,7 +83,7 @@ export default function TestDrivePage() {
             <Button
               asChild
               variant="outline"
-              className="w-full border-luxury-accent/50 hover:border-luxury-accent hover:bg-luxury-accent/5"
+              className="w-full border-primary/50 hover:border-primary hover:bg-primary/5"
             >
               <Link href="/cars">Découvrir nos véhicules</Link>
             </Button>

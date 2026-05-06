@@ -38,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={cn("dark", "font-sans", geist.variable)}>
+    <html lang="fr" className={cn("light", "font-sans", geist.variable)}>
       <body
         className={`${cormorant.variable} ${geist.variable} antialiased min-h-screen flex flex-col font-sans overflow-x-hidden`}
       >

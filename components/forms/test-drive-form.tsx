@@ -112,12 +112,12 @@ export function TestDriveForm() {
 
   if (submitted) {
     return (
-      <div className="rounded-lg border border-luxury-accent/30 bg-luxury-accent/5 p-10 text-center">
+      <div className="rounded-lg border border-primary/30 bg-primary/5 p-10 text-center">
         <div
-          className="mx-auto mb-6 flex size-16 items-center justify-center rounded-full bg-luxury-accent/20 animate-in zoom-in duration-500"
+          className="mx-auto mb-6 flex size-16 items-center justify-center rounded-full bg-primary/15 animate-in zoom-in duration-500"
           aria-hidden
         >
-          <span className="text-2xl font-bold text-luxury-accent">✓</span>
+          <span className="text-2xl font-bold text-primary">✓</span>
         </div>
         <h2 className="mb-2 text-xl font-semibold text-foreground">
           Demande envoyée avec succès

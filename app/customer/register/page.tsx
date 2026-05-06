@@ -150,7 +150,7 @@ export default function CustomerRegisterPage() {
           />
           <Button
             type="submit"
-            variant="luxury"
+            variant="default"
             className="w-full"
             disabled={isSubmitting}
           >
@@ -169,7 +169,7 @@ export default function CustomerRegisterPage() {
         Déjà un compte ?{" "}
         <Link
           href="/customer/login"
-          className="font-medium text-luxury-accent hover:underline"
+          className="font-medium text-primary hover:underline"
         >
           Se connecter
         </Link>

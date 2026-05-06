@@ -119,7 +119,7 @@ export function CustomerTestDrivesList() {
   if (isLoading) {
     return (
       <div className="flex min-h-[200px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-luxury-accent border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -166,7 +166,7 @@ export function CustomerTestDrivesList() {
           {testDrives.map((td) => (
             <div
               key={td.id}
-              className="cursor-pointer rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:border-luxury-accent/30 hover:shadow-md"
+              className="cursor-pointer rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:border-primary/30 hover:shadow-md"
               onClick={() => openDetail(td)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") openDetail(td);
@@ -229,7 +229,7 @@ export function CustomerTestDrivesList() {
                   className={cn(
                     "min-h-[80px] border-r border-b border-border p-2",
                     day === null && "bg-muted/30",
-                    hasTestDrives && "bg-luxury-accent/5"
+                    hasTestDrives && "bg-primary/5"
                   )}
                 >
                   {day && (

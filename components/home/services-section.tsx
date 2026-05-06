@@ -30,7 +30,7 @@ export function ServicesSection() {
       <div className="container mx-auto px-4 md:px-6">
         {/* Section Header */}
         <div className="mx-auto mb-16 max-w-2xl text-center">
-          <span className="mb-4 inline-block rounded-full bg-luxury-accent/10 px-4 py-1.5 text-sm font-medium text-luxury-accent">
+          <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
             Nos services
           </span>
           <h2 className="section-title mb-4 text-foreground">
@@ -49,7 +49,7 @@ export function ServicesSection() {
             return (
               <Card
                 key={service.id}
-                className="group flex flex-col overflow-hidden rounded-2xl border-border/60 bg-card shadow-sm transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:border-luxury-accent/30"
+                className="group flex flex-col overflow-hidden rounded-2xl border-border/60 bg-card shadow-sm transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:border-primary/30"
               >
                 {/* Image */}
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted">
@@ -62,13 +62,13 @@ export function ServicesSection() {
                   />
                   {/* Icon Overlay */}
                   <div className="absolute bottom-4 left-4 flex h-12 w-12 items-center justify-center rounded-xl bg-card/90 backdrop-blur-sm shadow-lg transition-transform group-hover:scale-110">
-                    <ServiceIcon className="h-6 w-6 text-luxury-accent" />
+                    <ServiceIcon className="h-6 w-6 text-primary" />
                   </div>
                 </div>
 
                 {/* Content */}
                 <CardHeader className="space-y-3 px-6 pt-6">
-                  <CardTitle className="font-serif text-xl group-hover:text-luxury-accent transition-colors">
+                  <CardTitle className="font-serif text-xl group-hover:text-primary transition-colors">
                     {service.title}
                   </CardTitle>
                   <CardDescription className="text-base leading-relaxed">
@@ -82,7 +82,7 @@ export function ServicesSection() {
                   <Button
                     variant="link"
                     asChild
-                    className="mt-4 h-auto justify-start p-0 text-luxury-accent group/link hover:text-luxury-accent/80"
+                    className="mt-4 h-auto justify-start p-0 text-primary group/link hover:text-primary/80"
                   >
                     <Link href="/services" className="flex items-center gap-2">
                       En savoir plus
@@ -101,7 +101,7 @@ export function ServicesSection() {
             asChild
             size="lg"
             variant="outline"
-            className="rounded-lg border-luxury-accent/50 px-8 hover:border-luxury-accent hover:bg-luxury-accent/5"
+            className="rounded-lg border-primary/50 px-8 hover:border-primary hover:bg-primary/5"
           >
             <Link href="/services">
               Découvrir tous nos services

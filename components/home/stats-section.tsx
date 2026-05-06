@@ -93,11 +93,11 @@ export function StatsSection() {
           {stats.map((stat, index) => (
             <div
               key={stat.label}
-              className="group rounded-2xl border border-border/50 bg-card p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-luxury-accent/30 hover:shadow-xl"
+              className="group rounded-2xl border border-border/50 bg-card p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-luxury-accent/20 to-luxury-accent/5 transition-transform group-hover:scale-110">
-                <stat.icon className="h-6 w-6 text-luxury-accent" />
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 transition-transform group-hover:scale-110">
+                <stat.icon className="h-6 w-6 text-primary" />
               </div>
               <AnimatedCounter value={stat.value} suffix={stat.suffix} />
               <p className="mt-1 font-medium text-foreground">{stat.label}</p>

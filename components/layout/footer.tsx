@@ -19,11 +19,7 @@ export function Footer() {
 
   return (
     <footer
-      className="border-t border-white/10 text-primary-foreground overflow-hidden"
-      style={{
-        background:
-          "linear-gradient(180deg, oklch(0.1 0.02 265) 0%, oklch(0.08 0.02 265) 100%)",
-      }}
+      className="border-t border-border text-foreground overflow-hidden bg-background"
     >
       <div className="container px-4 py-16 md:px-6">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
@@ -34,10 +30,10 @@ export function Footer() {
                 alt="Baccouche Automobiles"
                 width={120}
                 height={36}
-                className="h-9 w-auto object-contain brightness-0 invert opacity-95"
+                className="h-9 w-auto object-contain opacity-95"
               />
             </div>
-            <p className="text-sm text-primary-foreground/80 leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               Premier concessionnaire BMW à Sousse, agent agréé par Ben Jemâa
               Motors, importateur officiel de la marque BMW en Tunisie.
             </p>
@@ -52,7 +48,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-primary-foreground/80 hover:text-luxury-accent transition-colors"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -65,9 +61,9 @@ export function Footer() {
             <h3 className="font-serif text-lg font-semibold tracking-wide">
               Contact
             </h3>
-            <ul className="space-y-3 text-sm text-primary-foreground/80">
+            <ul className="space-y-3 text-sm text-muted-foreground">
               <li>
-                <span className="block font-medium text-primary-foreground">Adresse</span>
+                <span className="block font-medium text-foreground">Adresse</span>
                 <span>
                   Route Ceinture Oued Arouk
                   <br />
@@ -75,25 +71,25 @@ export function Footer() {
                 </span>
               </li>
               <li>
-                <span className="block font-medium text-primary-foreground">Tél</span>
+                <span className="block font-medium text-foreground">Tél</span>
                 <a
                   href="tel:+21670220300"
-                  className="hover:text-luxury-accent transition-colors"
+                  className="hover:text-primary transition-colors"
                 >
                   +216 70 220 300
                 </a>
               </li>
               <li>
-                <span className="block font-medium text-primary-foreground">Email</span>
+                <span className="block font-medium text-foreground">Email</span>
                 <a
                   href="mailto:contact@baccoucheautomobiles.tn"
-                  className="hover:text-luxury-accent transition-colors"
+                  className="hover:text-primary transition-colors"
                 >
                   contact@baccoucheautomobiles.tn
                 </a>
               </li>
               <li>
-                <span className="block font-medium text-primary-foreground">Horaires</span>
+                <span className="block font-medium text-foreground">Horaires</span>
                 <span>Lun - Sam: 8h00 - 18h00</span>
               </li>
             </ul>
@@ -103,14 +99,14 @@ export function Footer() {
             <h3 className="font-serif text-lg font-semibold tracking-wide">
               Newsletter
             </h3>
-            <p className="text-sm text-primary-foreground/80 leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               Recevez nos dernières offres et actualités BMW directement dans votre boîte mail.
             </p>
             <NewsletterSignup variant="compact" className="mt-4" />
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/10 text-center text-sm text-primary-foreground/70">
+        <div className="mt-12 pt-8 border-t border-border text-center text-sm text-muted-foreground/70">
           <p>
             © {currentYear} Baccouche Automobiles. Tous droits réservés. | BMW
             Sousse - Agent agréé Ben Jemâa Motors

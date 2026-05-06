@@ -12,9 +12,7 @@ const steps = [
 
 export function TestDriveCtaSection() {
   return (
-<<<<<<< HEAD
-    <section className="relative overflow-hidden bg-gradient-to-br from-luxury-black via-luxury-charcoal to-luxury-black">
->>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
+    <section className="relative overflow-hidden bg-gradient-to-br from-muted via-background to-muted">
       {/* Background Image with overlay */}
       <div className="absolute inset-0 z-0 opacity-30">
         <Image
@@ -28,24 +26,24 @@ export function TestDriveCtaSection() {
       </div>
 
       {/* Decorative elements */}
-      <div className="absolute left-0 top-1/2 z-10 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-luxury-accent/5 blur-3xl" />
-      <div className="absolute right-0 bottom-0 z-10 h-64 w-64 translate-x-1/3 translate-y-1/3 rounded-full bg-luxury-accent/5 blur-3xl" />
+      <div className="absolute left-0 top-1/2 z-10 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-3xl" />
+      <div className="absolute right-0 bottom-0 z-10 h-64 w-64 translate-x-1/3 translate-y-1/3 rounded-full bg-primary/5 blur-3xl" />
 
       <div className="section-padding relative z-20">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             {/* Left content */}
             <div className="flex flex-col justify-center">
-              <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white/80 backdrop-blur-sm">
-                <Calendar className="h-4 w-4 text-luxury-accent" />
+              <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-background/80 px-4 py-1.5 text-sm font-medium text-foreground/80 backdrop-blur-sm">
+                <Calendar className="h-4 w-4 text-primary" />
                 Test Drive
               </span>
 
-              <h2 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-5xl">
+              <h2 className="mb-6 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
                 Vivez l&apos;expérience BMW
               </h2>
 
-              <p className="mb-10 text-lg leading-relaxed text-white/80">
+              <p className="mb-10 text-lg leading-relaxed text-foreground/80">
                 Prenez le volant et découvrez le plaisir de conduire une BMW.
                 Réservez votre essai gratuit et laissez-vous séduire par la
                 performance et le confort de nos véhicules.
@@ -56,11 +54,11 @@ export function TestDriveCtaSection() {
                 {steps.map((step) => (
                   <div
                     key={step.label}
-                    className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm"
+                    className="rounded-xl border border-border bg-muted p-4 backdrop-blur-sm"
                   >
-                    <step.icon className="mb-2 h-6 w-6 text-luxury-accent" />
-                    <div className="font-medium text-white">{step.label}</div>
-                    <div className="text-sm text-white/60">{step.desc}</div>
+                    <step.icon className="mb-2 h-6 w-6 text-primary" />
+                    <div className="font-medium text-foreground">{step.label}</div>
+                    <div className="text-sm text-foreground/60">{step.desc}</div>
                   </div>
                 ))}
               </div>
@@ -70,7 +68,7 @@ export function TestDriveCtaSection() {
                 <Button
                   asChild
                   size="lg"
-                  className="rounded-lg bg-luxury-accent px-10 py-6 text-base font-medium shadow-lg transition-all hover:bg-luxury-accent/90 hover:shadow-xl hover:scale-105"
+                  className="rounded-lg bg-primary px-10 py-6 text-base font-medium shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl hover:scale-105"
                 >
                   <Link href="/test-drive">
                     Réserver un essai
@@ -81,7 +79,7 @@ export function TestDriveCtaSection() {
                   asChild
                   variant="outline"
                   size="lg"
-                  className="rounded-lg border-2 border-white/50 bg-white/10 px-8 py-6 text-base font-medium backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white"
+                  className="rounded-lg border-2 border-foreground/30 bg-background/80 px-8 py-6 text-base font-medium backdrop-blur-sm transition-all hover:bg-background hover:border-foreground/50"
                 >
                   <Link href="/cars">Voir les modèles</Link>
                 </Button>
@@ -92,13 +90,13 @@ export function TestDriveCtaSection() {
             <div className="hidden lg:flex items-center">
               <div className="relative w-full">
                 {/* Main card */}
-                <div className="rounded-2xl border border-white/20 bg-white/10 p-8 backdrop-blur-md">
-                  <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-luxury-accent/20 px-4 py-2">
-                    <CheckCircle className="h-5 w-5 text-luxury-accent" />
-                    <span className="font-medium text-white">Essai gratuit</span>
+                <div className="rounded-2xl border border-border bg-background/80 p-8 backdrop-blur-md">
+                  <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/20 px-4 py-2">
+                    <CheckCircle className="h-5 w-5 text-primary" />
+                    <span className="font-medium text-foreground">Essai gratuit</span>
                   </div>
 
-                  <h3 className="mb-4 text-2xl font-bold text-white">
+                  <h3 className="mb-4 text-2xl font-bold text-foreground">
                     Votre essai personnalisé
                   </h3>
 
@@ -109,8 +107,8 @@ export function TestDriveCtaSection() {
                       "Découverte de toutes les fonctionnalités",
                       "Conseils personnalisés",
                     ].map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-white/80">
-                        <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-luxury-accent" />
+                      <li key={item} className="flex items-start gap-3 text-foreground/80">
+                        <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -118,7 +116,7 @@ export function TestDriveCtaSection() {
 
                   <Button
                     asChild
-                    className="w-full bg-luxury-accent hover:bg-luxury-accent/90"
+                    className="w-full bg-primary hover:bg-primary/90"
                   >
                     <Link href="/test-drive">
                       Réserver maintenant
@@ -128,7 +126,7 @@ export function TestDriveCtaSection() {
                 </div>
 
                 {/* Decorative element */}
-                <div className="absolute -bottom-4 -right-4 h-32 w-32 rounded-2xl border border-luxury-accent/30 bg-luxury-accent/5 backdrop-blur-sm -z-10" />
+                <div className="absolute -bottom-4 -right-4 h-32 w-32 rounded-2xl border border-primary/30 bg-primary/5 backdrop-blur-sm -z-10" />
               </div>
             </div>
           </div>

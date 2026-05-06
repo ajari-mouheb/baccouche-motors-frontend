@@ -197,7 +197,7 @@ export function CarForm({ carId }: CarFormProps) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-10 w-10 animate-spin text-luxury-accent" />
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
           <p className="text-sm text-muted-foreground">Chargement...</p>
         </div>
       </div>
@@ -216,8 +216,8 @@ export function CarForm({ carId }: CarFormProps) {
           Retour aux véhicules
         </Link>
         <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-luxury-accent/10">
-            <CarFront className="size-6 text-luxury-accent" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+            <CarFront className="size-6 text-primary" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">
@@ -235,8 +235,8 @@ export function CarForm({ carId }: CarFormProps) {
           {/* General Information */}
           <section className="rounded-xl border border-border/50 bg-card p-6 md:p-8">
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-luxury-accent/20 to-luxury-accent/5">
-                <CarFront className="size-5 text-luxury-accent" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/5">
+                <CarFront className="size-5 text-primary" />
               </div>
               <div>
                 <h2 className="text-lg font-semibold">Informations générales</h2>
@@ -303,8 +303,8 @@ export function CarForm({ carId }: CarFormProps) {
           {/* Image Upload */}
           <section className="rounded-xl border border-border/50 bg-card p-6 md:p-8">
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-luxury-accent/20 to-luxury-accent/5">
-                <Image className="size-5 text-luxury-accent" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/5">
+                <Image className="size-5 text-primary" />
               </div>
               <div>
                 <h2 className="text-lg font-semibold">Image du véhicule</h2>
@@ -346,7 +346,7 @@ export function CarForm({ carId }: CarFormProps) {
                     </div>
                     {uploadCarImage.isPending && (
                       <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                        <div className="flex items-center gap-3 text-white">
+                        <div className="flex items-center gap-3 text-foreground">
                           <Loader2 className="h-6 w-6 animate-spin" />
                           <span>Téléchargement...</span>
                         </div>
@@ -363,8 +363,8 @@ export function CarForm({ carId }: CarFormProps) {
                   className={cn(
                     "relative aspect-[16/10] overflow-hidden rounded-xl border-2 border-dashed cursor-pointer transition-all",
                     isDragging
-                      ? "border-luxury-accent bg-luxury-accent/5"
-                      : "border-border hover:border-luxury-accent/50 hover:bg-muted/50"
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/50 hover:bg-muted/50"
                   )}
                 >
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6">
@@ -434,8 +434,8 @@ export function CarForm({ carId }: CarFormProps) {
           {/* Description */}
           <section className="rounded-xl border border-border/50 bg-card p-6 md:p-8">
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-luxury-accent/20 to-luxury-accent/5">
-                <FileText className="size-5 text-luxury-accent" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/5">
+                <FileText className="size-5 text-primary" />
               </div>
               <div>
                 <h2 className="text-lg font-semibold">Description</h2>

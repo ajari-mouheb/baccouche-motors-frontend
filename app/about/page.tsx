@@ -50,7 +50,7 @@ export default function AboutPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative min-h-[50vh] overflow-hidden bg-gradient-to-br from-luxury-black to-luxury-charcoal">
+      <section className="relative min-h-[50vh] overflow-hidden bg-gradient-to-br from-muted to-background">
         <div className="absolute inset-0 opacity-30">
           <Image
             src={images.presentation}
@@ -63,10 +63,10 @@ export default function AboutPage() {
         </div>
         <div className="container relative z-10 mx-auto flex min-h-[50vh] items-center px-4 py-16 md:px-6">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl">
               Notre Histoire
             </h1>
-            <p className="text-lg text-white/80 md:text-xl">
+            <p className="text-lg text-foreground/80 md:text-xl">
               Depuis plus de 25 ans, Baccouche Automobiles accompagne ses clients
               dans la découverte de l&apos;excellence BMW.
             </p>
@@ -80,8 +80,8 @@ export default function AboutPage() {
           <div className="grid grid-cols-2 gap-6 md:grid-cols-4 md:gap-8">
             {stats.map((stat) => (
               <div key={stat.label} className="flex flex-col items-center text-center">
-                <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-xl bg-luxury-accent/10">
-                  <stat.icon className="h-7 w-7 text-luxury-accent" />
+                <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10">
+                  <stat.icon className="h-7 w-7 text-primary" />
                 </div>
                 <p className="text-3xl font-bold text-foreground">{stat.value}</p>
                 <p className="text-sm text-muted-foreground">{stat.label}</p>
@@ -144,8 +144,8 @@ export default function AboutPage() {
                 key={value.title}
                 className="flex flex-col items-center rounded-xl border border-border/50 bg-card p-8 text-center transition-shadow hover:shadow-lg"
               >
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-luxury-accent/10">
-                  <value.icon className="h-8 w-8 text-luxury-accent" />
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+                  <value.icon className="h-8 w-8 text-primary" />
                 </div>
                 <h3 className="mb-2 text-xl font-semibold text-foreground">{value.title}</h3>
                 <p className="text-muted-foreground">{value.description}</p>
@@ -175,14 +175,14 @@ export default function AboutPage() {
                 }`}
               >
                 {/* Dot */}
-                <div className="absolute left-4 z-10 h-3 w-3 -translate-x-1/2 rounded-full bg-luxury-accent ring-4 ring-background md:left-1/2" />
+                <div className="absolute left-4 z-10 h-3 w-3 -translate-x-1/2 rounded-full bg-primary ring-4 ring-background md:left-1/2" />
                 {/* Content */}
                 <div
                   className={`ml-12 w-full rounded-xl border border-border/50 bg-card p-6 md:ml-0 md:w-[calc(50%-2rem)] ${
                     index % 2 === 0 ? "md:mr-auto md:ml-0" : "md:ml-auto md:mr-0"
                   }`}
                 >
-                  <span className="mb-2 inline-block rounded-full bg-luxury-accent/10 px-3 py-1 text-sm font-medium text-luxury-accent">
+                  <span className="mb-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
                     {item.year}
                   </span>
                   <h3 className="mb-1 text-lg font-semibold text-foreground">{item.title}</h3>
@@ -212,7 +212,7 @@ export default function AboutPage() {
             ].map((service) => (
               <div
                 key={service.title}
-                className="rounded-xl border border-border/50 bg-card p-6 transition-all hover:border-luxury-accent/50 hover:shadow-md"
+                className="rounded-xl border border-border/50 bg-card p-6 transition-all hover:border-primary/50 hover:shadow-md"
               >
                 <h3 className="mb-2 font-semibold text-foreground">{service.title}</h3>
                 <p className="text-sm text-muted-foreground">{service.desc}</p>
@@ -235,8 +235,8 @@ export default function AboutPage() {
               </div>
               <div className="grid gap-8 md:grid-cols-3">
                 <div className="flex flex-col items-center text-center">
-                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-luxury-accent/10">
-                    <MapPin className="h-6 w-6 text-luxury-accent" />
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                    <MapPin className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="mb-1 font-semibold text-foreground">Adresse</h3>
                   <p className="text-sm text-muted-foreground">
@@ -245,8 +245,8 @@ export default function AboutPage() {
                   </p>
                 </div>
                 <div className="flex flex-col items-center text-center">
-                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-luxury-accent/10">
-                    <Phone className="h-6 w-6 text-luxury-accent" />
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                    <Phone className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="mb-1 font-semibold text-foreground">Téléphone</h3>
                   <p className="text-sm text-muted-foreground">
@@ -255,8 +255,8 @@ export default function AboutPage() {
                   </p>
                 </div>
                 <div className="flex flex-col items-center text-center">
-                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-luxury-accent/10">
-                    <Clock className="h-6 w-6 text-luxury-accent" />
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                    <Clock className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="mb-1 font-semibold text-foreground">Horaires</h3>
                   <p className="text-sm text-muted-foreground">

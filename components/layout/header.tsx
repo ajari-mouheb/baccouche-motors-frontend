@@ -44,8 +44,7 @@ export function Header() {
         <Link
           href="/"
           className={cn(
-            "flex items-center gap-2 transition-opacity hover:opacity-90",
-            "brightness-0 invert"
+            "flex items-center gap-2 transition-opacity hover:opacity-90"
           )}
         >
           <Image
@@ -66,9 +65,9 @@ export function Header() {
               className={cn(
                 "relative text-sm font-medium tracking-wide transition-colors pb-1",
                 isHome
-                  ? "text-white/90 hover:text-white after:bg-luxury-accent"
-                  : "text-muted-foreground hover:text-foreground after:bg-luxury-accent",
-                (isHome ? "hover:text-white" : "hover:text-foreground"),
+                  ? "text-foreground/90 hover:text-foreground after:bg-primary"
+                  : "text-muted-foreground hover:text-foreground after:bg-primary",
+                "hover:text-foreground",
                 "after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:transition-all after:duration-200 hover:after:w-full"
               )}
             >
@@ -85,9 +84,7 @@ export function Header() {
               size="sm"
               className={cn(
                 "hidden sm:inline-flex gap-1.5",
-                isHome
-                  ? "text-white hover:bg-white/10 hover:text-white"
-                  : "text-muted-foreground hover:text-foreground"
+                "text-muted-foreground hover:text-foreground"
               )}
             >
               <Link href={user?.role === "customer" ? "/customer/dashboard" : "/customer/login"}>
@@ -103,9 +100,7 @@ export function Header() {
               size="sm"
               className={cn(
                 "hidden sm:inline-flex",
-                isHome
-                  ? "text-white hover:bg-white/10 hover:text-white"
-                  : "text-muted-foreground hover:text-foreground"
+                "text-muted-foreground hover:text-foreground"
               )}
             >
               <Link href="/admin/dashboard">Admin</Link>
@@ -116,9 +111,7 @@ export function Header() {
             size="sm"
             className={cn(
               "hidden sm:inline-flex",
-              isHome
-                ? "border-2 border-white bg-white/10 text-white hover:bg-white/20 hover:border-white/60"
-                : "border-2 border-luxury-accent bg-luxury-accent text-primary hover:bg-luxury-accent/90 hover:border-luxury-accent/90"
+              "border-2 border-primary bg-primary text-primary-foreground hover:bg-primary/90 hover:border-primary/90"
             )}
           >
             <Link href="/test-drive">Test Drive</Link>
@@ -130,7 +123,7 @@ export function Header() {
                 variant="ghost"
                 size="icon"
                 aria-label="Menu"
-                className={isHome ? "text-white hover:bg-white/10 hover:text-white" : ""}
+                className={isHome ? "text-foreground hover:bg-muted hover:text-foreground" : ""}
               >
                 <Menu className="size-5" />
               </Button>
@@ -145,7 +138,7 @@ export function Header() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="text-sm font-medium hover:text-luxury-accent transition-colors"
+                    className="text-sm font-medium hover:text-primary transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -153,13 +146,13 @@ export function Header() {
                 <Link
                   href={user?.role === "customer" ? "/customer/dashboard" : "/customer/login"}
                   onClick={() => setOpen(false)}
-                  className="text-sm font-medium hover:text-luxury-accent transition-colors"
+                  className="text-sm font-medium hover:text-primary transition-colors"
                 >
                   Espace client
                 </Link>
                 <Button
                   asChild
-                  className="mt-4 bg-luxury-accent text-primary hover:bg-luxury-accent/90"
+                  className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90"
                 >
                   <Link href="/test-drive" onClick={() => setOpen(false)}>
                     Test Drive

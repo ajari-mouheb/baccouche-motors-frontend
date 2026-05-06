@@ -115,7 +115,7 @@ export function ImageGallery({ images, alt, className }: ImageGalleryProps) {
                 className={cn(
                   "relative h-20 w-28 shrink-0 overflow-hidden rounded-lg transition-all",
                   selectedIndex === index
-                    ? "ring-2 ring-luxury-accent ring-offset-2"
+                    ? "ring-2 ring-primary ring-offset-2"
                     : "opacity-70 hover:opacity-100"
                 )}
               >

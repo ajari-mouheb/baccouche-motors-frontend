@@ -45,7 +45,7 @@ export function RichTextEditor({
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: "text-luxury-accent hover:underline",
+          class: "text-primary hover:underline",
         },
       }),
       Image.configure({
@@ -246,7 +246,7 @@ export function RichTextEditor({
           margin-bottom: 0.5rem;
         }
         .ProseMirror blockquote {
-          border-left: 3px solid hsl(var(--luxury-accent));
+          border-left: 3px solid hsl(var(--primary));
           padding-left: 1rem;
           margin-left: 0;
           font-style: italic;

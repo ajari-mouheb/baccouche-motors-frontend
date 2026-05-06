@@ -81,7 +81,7 @@ export function NewsSection() {
                 <Button
                   variant="link"
                   asChild
-                  className="h-auto p-0 text-luxury-accent hover:text-luxury-accent/80"
+                  className="h-auto p-0 text-primary hover:text-primary/80"
                 >
                   <Link href={`/actualites/${article.slug}`}>Lire la suite</Link>
                 </Button>
@@ -93,7 +93,7 @@ export function NewsSection() {
           <Button
             asChild
             variant="outline"
-            className="border-luxury-accent/50 hover:border-luxury-accent hover:bg-luxury-accent/5"
+            className="border-primary/50 hover:border-primary hover:bg-primary/5"
           >
             <Link href="/actualites">Voir toutes les actualités</Link>
           </Button>

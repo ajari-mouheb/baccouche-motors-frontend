@@ -79,10 +79,10 @@ export function TestDrivesChart({ className }: TestDrivesChartProps) {
             <Line
               type="monotone"
               dataKey="demandes"
-              stroke="hsl(var(--luxury-accent))"
+              stroke="hsl(var(--primary))"
               strokeWidth={2}
-              dot={{ fill: "hsl(var(--luxury-accent))", r: 4 }}
-              activeDot={{ r: 6, fill: "hsl(var(--luxury-accent))" }}
+              dot={{ fill: "hsl(var(--primary))", r: 4 }}
+              activeDot={{ r: 6, fill: "hsl(var(--primary))" }}
             />
           </LineChart>
         </ResponsiveContainer>

@@ -27,16 +27,16 @@ export function AuthPageLayout({
         className="pointer-events-none fixed inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(ellipse 80% 50% at 50% 0%, oklch(0.22 0.02 265 / 0.4) 0%, transparent 50%), linear-gradient(180deg, oklch(0.12 0.015 265) 0%, oklch(0.08 0.02 265) 100%)",
+            "radial-gradient(ellipse 80% 50% at 50% 0%, oklch(0.85 0.02 250 / 0.25) 0%, transparent 50%), linear-gradient(180deg, oklch(0.985 0.005 85) 0%, oklch(0.94 0.01 250) 100%)",
         }}
       />
       {/* Subtle grid pattern */}
       <div
-        className="pointer-events-none fixed inset-0 -z-10 opacity-[0.03]"
+        className="pointer-events-none fixed inset-0 -z-10 opacity-[0.04]"
         style={{
           backgroundImage: `
-            linear-gradient(oklch(1 0 0) 1px, transparent 1px),
-            linear-gradient(90deg, oklch(1 0 0) 1px, transparent 1px)
+            linear-gradient(oklch(0 0 0 / 0.06) 1px, transparent 1px),
+            linear-gradient(90deg, oklch(0 0 0 / 0.06) 1px, transparent 1px)
           `,
           backgroundSize: "48px 48px",
         }}
@@ -60,13 +60,13 @@ export function AuthPageLayout({
               alt="Baccouche Automobiles"
               width={160}
               height={48}
-              className="h-10 w-auto object-contain brightness-0 invert opacity-95 sm:h-12"
+              className="h-10 w-auto object-contain opacity-95 sm:h-12"
               priority
             />
           </div>
         )}
 
-        <div className="rounded-2xl border border-border bg-card/95 p-8 shadow-xl shadow-black/20 backdrop-blur sm:p-10">
+        <div className="rounded-2xl border border-border bg-card/95 p-8 shadow-xl shadow-border/20 backdrop-blur sm:p-10">
           <div className="mb-8">
             <h1 className="section-title text-center">{title}</h1>
             {subtitle && (

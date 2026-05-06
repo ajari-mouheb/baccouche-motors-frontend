@@ -49,35 +49,33 @@ export function HeroSection() {
           className="absolute inset-0 z-10"
           style={{
             background:
-              "linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0.1) 100%)",
+              "linear-gradient(to right, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 40%, rgba(255,255,255,0.4) 70%, rgba(255,255,255,0.2) 100%)",
           }}
         />
       </div>
 
       {/* Decorative Elements */}
       <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 right-0 w-96 h-96 bg-luxury-accent/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-luxury-accent/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-primary/5 rounded-full blur-3xl" />
       </div>
 
       {/* Content */}
-<<<<<<< HEAD
       <div className="container relative z-20 mx-auto px-4 md:px-6">
         <div className="mx-auto max-w-2xl text-left md:max-w-xl lg:max-w-2xl">
->>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
           {/* Trust Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 backdrop-blur-sm">
-            <Shield className="h-4 w-4 text-luxury-accent" />
-            <span className="text-sm font-medium text-white/90">Agent agréé Ben Jemâa Motors</span>
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-background/80 px-4 py-2 backdrop-blur-sm">
+            <Shield className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium text-foreground/90">Agent agréé Ben Jemâa Motors</span>
           </div>
 
           {/* Animated Subtitle */}
-          <p className="hero-subtitle mb-4 font-medium tracking-[0.2em] text-white/90 uppercase animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <p className="hero-subtitle mb-4 font-medium tracking-[0.2em] text-foreground/90 uppercase animate-in fade-in slide-in-from-bottom-4 duration-700">
             L&apos;excellence automobile à Sousse
           </p>
 
           {/* Main Title */}
-          <h1 className="hero-title mb-6 text-white drop-shadow-lg animate-in fade-in slide-in-from-bottom-6 duration-700 delay-150">
+          <h1 className="hero-title mb-6 text-foreground drop-shadow-lg animate-in fade-in slide-in-from-bottom-6 duration-700 delay-150">
             Où le{" "}
             <span
               key={currentWordIndex}
@@ -87,13 +85,13 @@ export function HeroSection() {
                   : "opacity-100 transform translate-y-0"
               }`}
             >
-              <span className="text-luxury-accent">{words[currentWordIndex]}</span>
+              <span className="text-primary">{words[currentWordIndex]}</span>
             </span>{" "}
             rencontre la performance
           </h1>
 
           {/* Description */}
-          <p className="mb-10 text-base leading-relaxed text-white/90 md:text-lg animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300">
+          <p className="mb-10 text-base leading-relaxed text-foreground/90 md:text-lg animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300">
             Premier concessionnaire BMW à Sousse. Découvrez notre collection de
             véhicules neufs et d&apos;occasion certifiés, notre service
             après-vente d&apos;excellence et réservez votre essai.
@@ -104,7 +102,7 @@ export function HeroSection() {
             <Button
               asChild
               size="lg"
-              className="rounded-lg border-2 border-luxury-accent bg-luxury-accent px-8 py-6 text-base font-medium text-primary shadow-lg transition-all hover:bg-luxury-accent/90 hover:shadow-xl hover:scale-105"
+              className="rounded-lg border-2 border-primary bg-primary px-8 py-6 text-base font-medium text-primary shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl hover:scale-105"
             >
               <Link href="/test-drive">Réserver un Test Drive</Link>
             </Button>
@@ -112,7 +110,7 @@ export function HeroSection() {
               asChild
               variant="outline"
               size="lg"
-              className="rounded-lg border-2 border-white/70 bg-white/10 px-8 py-6 text-base font-medium backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white hover:scale-105"
+              className="rounded-lg border-2 border-foreground/30 bg-background/80 px-8 py-6 text-base font-medium backdrop-blur-sm transition-all hover:bg-background hover:border-foreground/50 hover:scale-105"
             >
               <Link href="/cars">Découvrir les véhicules</Link>
             </Button>
@@ -124,10 +122,10 @@ export function HeroSection() {
               {trustBadges.map((badge, index) => (
                 <div
                   key={badge.label}
-                  className="flex items-center gap-2 text-white/70"
+                  className="flex items-center gap-2 text-foreground/70"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <badge.icon className="h-5 w-5 text-luxury-accent" />
+                  <badge.icon className="h-5 w-5 text-primary" />
                   <span className="text-sm font-medium">{badge.label}</span>
                 </div>
               ))}
@@ -143,7 +141,7 @@ export function HeroSection() {
             const nextSection = document.querySelector("#presentation");
             nextSection?.scrollIntoView({ behavior: "smooth" });
           }}
-          className="flex flex-col items-center gap-2 text-white/70 transition-colors hover:text-white"
+          className="flex flex-col items-center gap-2 text-foreground/70 transition-colors hover:text-foreground"
           aria-label="Défiler vers le bas"
         >
           <span className="text-xs font-medium tracking-wider uppercase">Découvrir</span>

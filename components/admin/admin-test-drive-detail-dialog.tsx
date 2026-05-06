@@ -83,7 +83,7 @@ export function AdminTestDriveDetailDialog({
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Car className="size-5 text-luxury-accent" />
+            <Car className="size-5 text-primary" />
             Demande de Test Drive
           </DialogTitle>
         </DialogHeader>
@@ -106,7 +106,7 @@ export function AdminTestDriveDetailDialog({
 
         {/* Vehicle Info */}
         <div className="space-y-4">
-          <div className="rounded-lg border border-border/50 bg-gradient-to-br from-luxury-accent/5 to-transparent p-4">
+          <div className="rounded-lg border border-border/50 bg-gradient-to-br from-primary/5 to-transparent p-4">
             <p className="mb-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">
               Véhicule
             </p>
@@ -170,7 +170,7 @@ export function AdminTestDriveDetailDialog({
                 </div>
                 <a
                   href={`mailto:${testDrive.email}`}
-                  className="text-luxury-accent hover:underline"
+                  className="text-primary hover:underline"
                 >
                   {testDrive.email}
                 </a>
@@ -182,7 +182,7 @@ export function AdminTestDriveDetailDialog({
                   </div>
                   <a
                     href={`tel:${testDrive.phone}`}
-                    className="text-foreground hover:text-luxury-accent transition-colors"
+                    className="text-foreground hover:text-primary transition-colors"
                   >
                     {testDrive.phone}
                   </a>

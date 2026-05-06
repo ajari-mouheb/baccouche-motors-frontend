@@ -52,7 +52,7 @@ export function AdminNewsList() {
     return (
       <div className="flex min-h-[300px] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-luxury-accent border-t-transparent" />
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
           <p className="text-sm text-muted-foreground">Chargement...</p>
         </div>
       </div>
@@ -120,7 +120,7 @@ export function AdminNewsList() {
                       href={`/actualites/${article.slug}`}
                       className="block"
                     >
-                      <h3 className="font-semibold text-foreground line-clamp-1 hover:text-luxury-accent transition-colors">
+                      <h3 className="font-semibold text-foreground line-clamp-1 hover:text-primary transition-colors">
                         {article.title}
                       </h3>
                     </Link>

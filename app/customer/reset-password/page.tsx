@@ -70,7 +70,7 @@ export default function ResetPasswordPage() {
         backHref="/customer/forgot-password"
         backLabel="Demander un nouveau lien"
       >
-        <Button asChild variant="luxury" className="w-full">
+        <Button asChild variant="default" className="w-full">
           <Link href="/customer/forgot-password">Demander un nouveau lien</Link>
         </Button>
       </AuthPageLayout>
@@ -86,7 +86,7 @@ export default function ResetPasswordPage() {
         backLabel="Se connecter"
       >
         <Button
-          variant="luxury"
+          variant="default"
           className="w-full"
           onClick={() => router.push("/customer/login")}
         >
@@ -133,7 +133,7 @@ export default function ResetPasswordPage() {
           />
           <Button
             type="submit"
-            variant="luxury"
+            variant="default"
             className="w-full"
             disabled={isSubmitting}
           >
@@ -151,7 +151,7 @@ export default function ResetPasswordPage() {
       <p className="mt-6 text-center text-sm text-muted-foreground">
         <Link
           href="/customer/login"
-          className="font-medium text-luxury-accent hover:underline"
+          className="font-medium text-primary hover:underline"
         >
           Retour à la connexion
         </Link>

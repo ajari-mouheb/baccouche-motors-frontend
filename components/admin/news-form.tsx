@@ -202,7 +202,7 @@ export function NewsForm({ articleId }: NewsFormProps) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-10 w-10 animate-spin text-luxury-accent" />
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
           <p className="text-sm text-muted-foreground">Chargement...</p>
         </div>
       </div>
@@ -221,8 +221,8 @@ export function NewsForm({ articleId }: NewsFormProps) {
           Retour aux articles
         </Link>
         <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-luxury-accent/10">
-            <FileText className="size-6 text-luxury-accent" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+            <FileText className="size-6 text-primary" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">
@@ -240,8 +240,8 @@ export function NewsForm({ articleId }: NewsFormProps) {
           {/* Title and Slug */}
           <section className="rounded-xl border border-border/50 bg-card p-6 md:p-8">
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-luxury-accent/20 to-luxury-accent/5">
-                <FileText className="size-5 text-luxury-accent" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/5">
+                <FileText className="size-5 text-primary" />
               </div>
               <div>
                 <h2 className="text-lg font-semibold">Informations générales</h2>
@@ -289,8 +289,8 @@ export function NewsForm({ articleId }: NewsFormProps) {
           {/* Content */}
           <section className="rounded-xl border border-border/50 bg-card p-6 md:p-8">
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-luxury-accent/20 to-luxury-accent/5">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-luxury-accent"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
               </div>
               <div>
                 <h2 className="text-lg font-semibold">Contenu</h2>
@@ -343,8 +343,8 @@ export function NewsForm({ articleId }: NewsFormProps) {
             {/* Metadata */}
             <section className="rounded-xl border border-border/50 bg-card p-6 md:p-8">
               <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-luxury-accent/20 to-luxury-accent/5">
-                  <Calendar className="size-5 text-luxury-accent" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/5">
+                  <Calendar className="size-5 text-primary" />
                 </div>
                 <div>
                   <h2 className="text-lg font-semibold">Métadonnées</h2>
@@ -370,8 +370,8 @@ export function NewsForm({ articleId }: NewsFormProps) {
             {/* Image */}
             <section className="rounded-xl border border-border/50 bg-card p-6 md:p-8">
               <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-luxury-accent/20 to-luxury-accent/5">
-                  <Image className="size-5 text-luxury-accent" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/5">
+                  <Image className="size-5 text-primary" />
                 </div>
                 <div>
                   <h2 className="text-lg font-semibold">Image</h2>
@@ -413,7 +413,7 @@ export function NewsForm({ articleId }: NewsFormProps) {
                       </div>
                       {uploadNewsImage.isPending && (
                         <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                          <div className="flex items-center gap-2 text-white">
+                          <div className="flex items-center gap-2 text-foreground">
                             <Loader2 className="h-5 w-5 animate-spin" />
                             <span>Téléchargement...</span>
                           </div>
@@ -430,8 +430,8 @@ export function NewsForm({ articleId }: NewsFormProps) {
                     className={cn(
                       "relative aspect-video overflow-hidden rounded-lg border-2 border-dashed cursor-pointer transition-all",
                       isDragging
-                        ? "border-luxury-accent bg-luxury-accent/5"
-                        : "border-border hover:border-luxury-accent/50 hover:bg-muted/50"
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-primary/50 hover:bg-muted/50"
                     )}
                   >
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4">

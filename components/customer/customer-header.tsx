@@ -79,7 +79,7 @@ export function CustomerHeader() {
 
             {/* User info */}
             <div className="hidden items-center gap-2 rounded-lg bg-muted/40 px-3 py-1.5 sm:flex">
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-luxury-accent/20 text-xs font-medium text-luxury-accent">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/15 text-xs font-medium text-primary">
                 {user.name?.charAt(0).toUpperCase() ?? "U"}
               </div>
               <div className="flex flex-col">

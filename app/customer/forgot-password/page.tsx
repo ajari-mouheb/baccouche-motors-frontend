@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
         <p className="text-center text-sm text-muted-foreground">
           Consultez votre boîte de réception et vos spams.
         </p>
-        <Button asChild variant="luxury" className="w-full">
+        <Button asChild variant="default" className="w-full">
           <Link href="/customer/login">Retour à la connexion</Link>
         </Button>
       </AuthPageLayout>
@@ -94,7 +94,7 @@ export default function ForgotPasswordPage() {
           />
           <Button
             type="submit"
-            variant="luxury"
+            variant="default"
             className="w-full"
             disabled={isSubmitting}
           >
@@ -112,7 +112,7 @@ export default function ForgotPasswordPage() {
       <p className="mt-6 text-center text-sm text-muted-foreground">
         <Link
           href="/customer/login"
-          className="font-medium text-luxury-accent hover:underline"
+          className="font-medium text-primary hover:underline"
         >
           Retour à la connexion
         </Link>

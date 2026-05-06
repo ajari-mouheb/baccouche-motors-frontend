@@ -30,27 +30,25 @@ export function PresentationSection() {
                 priority
               />
               {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
             </div>
 
             {/* Floating Badge */}
             <div className="absolute -bottom-6 -right-6 z-10 hidden lg:block">
-              <div className="rounded-2xl border border-luxury-accent/30 bg-card p-6 shadow-xl">
-                <div className="text-4xl font-bold text-luxury-accent">25+</div>
+              <div className="rounded-2xl border border-primary/30 bg-card p-6 shadow-xl">
+                <div className="text-4xl font-bold text-primary">25+</div>
                 <div className="text-sm text-muted-foreground">Années d&apos;excellence</div>
               </div>
             </div>
 
             {/* Decorative background */}
-<<<<<<< HEAD
-            <div className="absolute -z-10 -left-4 -top-4 h-full w-full rounded-2xl border-2 border-luxury-accent/20" />
->>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
+            <div className="absolute -z-10 -left-4 -top-4 h-full w-full rounded-2xl border-2 border-primary/20" />
           </div>
 
           {/* Content Side */}
           <div className="space-y-8">
             <div>
-              <span className="mb-4 inline-block rounded-full bg-luxury-accent/10 px-4 py-1.5 text-sm font-medium text-luxury-accent">
+              <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
                 À propos
               </span>
               <h2 className="section-title text-foreground">
@@ -75,8 +73,8 @@ export function PresentationSection() {
             <div className="grid gap-3 sm:grid-cols-2">
               {highlights.map((highlight) => (
                 <div key={highlight} className="flex items-center gap-3">
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-luxury-accent/10">
-                    <CheckCircle2 className="h-4 w-4 text-luxury-accent" />
+                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                    <CheckCircle2 className="h-4 w-4 text-primary" />
                   </div>
                   <span className="text-sm text-foreground">{highlight}</span>
                 </div>
@@ -88,7 +86,7 @@ export function PresentationSection() {
               <Button
                 asChild
                 size="lg"
-                className="rounded-lg bg-luxury-accent px-6 text-primary hover:bg-luxury-accent/90 group"
+                className="rounded-lg bg-primary px-6 text-primary hover:bg-primary/90 group"
               >
                 <Link href="/about">
                   En savoir plus
@@ -99,7 +97,7 @@ export function PresentationSection() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="rounded-lg border-luxury-accent/50 px-6 hover:border-luxury-accent hover:bg-luxury-accent/5"
+                className="rounded-lg border-primary/50 px-6 hover:border-primary hover:bg-primary/5"
               >
                 <Link href="/contact">Nous contacter</Link>
               </Button>

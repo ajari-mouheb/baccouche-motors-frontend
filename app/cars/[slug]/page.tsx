@@ -80,7 +80,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
               {car.make && `${car.make} • `}{car.model} • {car.year}
             </p>
             {car.price && (
-              <p className="mt-4 text-3xl font-bold text-luxury-accent">
+              <p className="mt-4 text-3xl font-bold text-primary">
                 {car.price}
               </p>
             )}

@@ -81,7 +81,7 @@ export function AdminContactsList() {
     return (
       <div className="flex min-h-[300px] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-luxury-accent border-t-transparent" />
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
           <p className="text-sm text-muted-foreground">Chargement...</p>
         </div>
       </div>
@@ -97,7 +97,7 @@ export function AdminContactsList() {
         action={
           <Link
             href="/contact"
-            className="text-sm font-medium text-luxury-accent hover:underline"
+            className="text-sm font-medium text-primary hover:underline"
           >
             Voir le formulaire de contact
           </Link>
@@ -133,7 +133,7 @@ export function AdminContactsList() {
             className={`group overflow-hidden rounded-xl border transition-all hover:shadow-md ${
               contact.read
                 ? "border-border/50 bg-card/50"
-                : "border-luxury-accent/30 bg-gradient-to-br from-luxury-accent/5 to-transparent"
+                : "border-primary/30 bg-gradient-to-br from-primary/5 to-transparent"
             }`}
           >
             <div className="p-5">
@@ -141,16 +141,16 @@ export function AdminContactsList() {
               <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                    contact.read ? "bg-muted" : "bg-luxury-accent/10"
+                    contact.read ? "bg-muted" : "bg-primary/10"
                   }`}>
-                    <User className={`size-5 ${contact.read ? "text-muted-foreground" : "text-luxury-accent"}`} />
+                    <User className={`size-5 ${contact.read ? "text-muted-foreground" : "text-primary"}`} />
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">{contact.name}</p>
                     <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                       <a
                         href={`mailto:${contact.email}`}
-                        className="flex items-center gap-1 text-luxury-accent hover:underline"
+                        className="flex items-center gap-1 text-primary hover:underline"
                       >
                         <Mail className="size-3" />
                         {contact.email}

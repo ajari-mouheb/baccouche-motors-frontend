@@ -101,7 +101,7 @@ export function ActivityFeed({ className, limit = 10 }: ActivityFeedProps) {
                   activity.type === "test_drive"
                     ? statusColors[activity.status]
                     : activity.status === "unread"
-                    ? "bg-luxury-accent/10 text-luxury-accent"
+                    ? "bg-primary/10 text-primary"
                     : "bg-muted text-muted-foreground"
                 )}>
                   <Icon className="size-4" />

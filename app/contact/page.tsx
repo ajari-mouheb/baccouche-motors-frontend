@@ -39,13 +39,13 @@ export default function ContactPage() {
   return (
     <div className="flex flex-col">
       {/* Header */}
-      <section className="bg-gradient-to-br from-luxury-black to-luxury-charcoal">
+      <section className="bg-gradient-to-br from-muted to-background">
         <div className="container mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-20">
           <div className="mx-auto max-w-2xl text-center">
-            <h1 className="mb-4 text-4xl font-bold tracking-tight text-white md:text-5xl">
+            <h1 className="mb-4 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
               Contactez-Nous
             </h1>
-            <p className="text-lg text-white/80">
+            <p className="text-lg text-foreground/80">
               Notre équipe est à votre disposition pour répondre à toutes vos
               questions et vous accompagner dans votre projet automobile.
             </p>
@@ -64,16 +64,16 @@ export default function ContactPage() {
                 {contactInfo.map((item) => (
                   <div
                     key={item.title}
-                    className="group rounded-xl border border-border/50 bg-card p-5 transition-all hover:border-luxury-accent/50 hover:shadow-md"
+                    className="group rounded-xl border border-border/50 bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md"
                   >
-                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-luxury-accent/10 transition-colors group-hover:bg-luxury-accent/20">
-                      <item.icon className="h-5 w-5 text-luxury-accent" />
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
+                      <item.icon className="h-5 w-5 text-primary" />
                     </div>
                     <h3 className="mb-1 font-semibold text-foreground">{item.title}</h3>
                     {item.href ? (
                       <a
                         href={item.href}
-                        className="whitespace-pre-line text-sm text-muted-foreground transition-colors hover:text-luxury-accent"
+                        className="whitespace-pre-line text-sm text-muted-foreground transition-colors hover:text-primary"
                       >
                         {item.content}
                       </a>
@@ -90,7 +90,7 @@ export default function ContactPage() {
               <div className="overflow-hidden rounded-xl border border-border/50 bg-card shadow-lg">
                 <div className="border-b border-border/50 bg-muted/30 px-5 py-3">
                   <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-luxury-accent" />
+                    <MapPin className="h-4 w-4 text-primary" />
                     <span className="text-sm font-medium">Notre Localisation</span>
                   </div>
                 </div>
@@ -110,10 +110,10 @@ export default function ContactPage() {
               </div>
 
               {/* Quick Contact Note */}
-              <div className="rounded-xl border border-luxury-accent/20 bg-luxury-accent/5 p-5">
+              <div className="rounded-xl border border-primary/20 bg-primary/5 p-5">
                 <div className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-luxury-accent/10">
-                    <MessageCircle className="h-5 w-5 text-luxury-accent" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                    <MessageCircle className="h-5 w-5 text-primary" />
                   </div>
                   <div>
                     <h3 className="mb-1 font-semibold text-foreground">Réponse Rapide</h3>

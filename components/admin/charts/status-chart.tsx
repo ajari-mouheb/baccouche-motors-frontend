@@ -13,7 +13,7 @@ import {
 import { useTestDrives } from "@/lib/hooks/use-test-drives";
 
 const statusConfig = {
-  pending: { label: "En attente", color: "hsl(45, 93%, 47%)" },
+  pending: { label: "En attente", color: "hsl(210, 90%, 55%)" },
   confirmed: { label: "Confirmé", color: "hsl(217, 91%, 60%)" },
   completed: { label: "Terminé", color: "hsl(142, 71%, 45%)" },
   rejected: { label: "Refusé", color: "hsl(0, 84%, 60%)" },

@@ -56,13 +56,11 @@ export function TestimonialsSection() {
   };
 
   return (
-<<<<<<< HEAD
     <section className="section-padding overflow-hidden">
->>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
       <div className="container mx-auto px-4 md:px-6">
         {/* Header */}
         <div className="mx-auto mb-16 max-w-2xl text-center">
-          <span className="mb-4 inline-block rounded-full bg-luxury-accent/10 px-4 py-1.5 text-sm font-medium text-luxury-accent">
+          <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
             Témoignages
           </span>
           <h2 className="section-title mb-4 text-foreground">
@@ -74,9 +72,7 @@ export function TestimonialsSection() {
         </div>
 
         {/* Testimonial Carousel */}
-<<<<<<< HEAD
         <div className="relative">
->>>>>>> 31450ee1aeb798b851e6fa19881a8664e00ac917
           {/* Cards Container */}
           <div className="relative mx-auto max-w-4xl">
             <div className="overflow-hidden">
@@ -90,15 +86,15 @@ export function TestimonialsSection() {
                       <CardContent className="p-8 md:p-12">
                         {/* Quote Icon */}
                         <div className="mb-6 flex justify-center">
-                          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-luxury-accent/10">
-                            <Quote className="h-7 w-7 text-luxury-accent" />
+                          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+                            <Quote className="h-7 w-7 text-primary" />
                           </div>
                         </div>
 
                         {/* Rating */}
                         <div className="mb-6 flex justify-center gap-1">
                           {Array.from({ length: testimonial.rating }).map((_, i) => (
-                            <Star key={i} className="h-5 w-5 fill-luxury-accent text-luxury-accent" />
+                            <Star key={i} className="h-5 w-5 fill-primary text-primary" />
                           ))}
                         </div>
 
@@ -115,7 +111,7 @@ export function TestimonialsSection() {
                           <div className="text-center">
                             <div className="font-semibold text-foreground">{testimonial.name}</div>
                             <div className="text-sm text-muted-foreground">{testimonial.role}</div>
-                            <div className="mt-1 inline-flex items-center gap-2 rounded-full bg-luxury-accent/10 px-3 py-1 text-xs font-medium text-luxury-accent">
+                            <div className="mt-1 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
                               {testimonial.car}
                             </div>
                           </div>
@@ -133,7 +129,7 @@ export function TestimonialsSection() {
                 variant="outline"
                 size="icon"
                 onClick={goToPrevious}
-                className="rounded-full border-border/50 hover:border-luxury-accent/50 hover:bg-luxury-accent/5"
+                className="rounded-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
               >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
@@ -146,7 +142,7 @@ export function TestimonialsSection() {
                     onClick={() => setActiveIndex(index)}
                     className={`h-2 rounded-full transition-all ${
                       index === activeIndex
-                        ? "w-6 bg-luxury-accent"
+                        ? "w-6 bg-primary"
                         : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
                     }`}
                     aria-label={`Aller au témoignage ${index + 1}`}
@@ -158,7 +154,7 @@ export function TestimonialsSection() {
                 variant="outline"
                 size="icon"
                 onClick={goToNext}
-                className="rounded-full border-border/50 hover:border-luxury-accent/50 hover:bg-luxury-accent/5"
+                className="rounded-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
               >
                 <ChevronRight className="h-5 w-5" />
               </Button>
